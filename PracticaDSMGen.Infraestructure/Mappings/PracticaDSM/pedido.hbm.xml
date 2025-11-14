@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+		<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+		                   assembly="PracticaDSMGen.Infraestructure"
+		                   namespace="PracticaDSMGen.Infraestructure.EN.PracticaDSM">
+		    
+		    
+			
+				<class name="PedidoNH" table="Pedido"> 
+				  	
+						<id name="Id" column="idPedido" type="integer"> 
+							<generator class="hilo"/>
+						</id>
+			
+					
+					<property name="Carrito" > 
+						<column name="carrito"  not-null="true"/>
+					</property>
+					<property name="Numero" type="string"> 
+						<column name="numero"  not-null="true"/>
+					</property>
+					<property name="Fecha" type="date"> 
+						<column name="fecha"  not-null="true"/>
+					</property>
+					<property name="TotalPrecio" type="big_decimal"> 
+						<column name="totalPrecio"  not-null="true"/>
+					</property>
+					<property name="EstadoPedido" > 
+						<column name="estadoPedido"  not-null="true"/>
+					</property>
+			
+			
+			
+		  			
+						<many-to-one name="Usuario" class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.UsuarioNH" >	
+								<column name="FK_email_idUsuario"/> 
+						</many-to-one>
+											 					
+			
+		  			
+						<bag name="LineaPedido" cascade="delete">
+							<key>
+							
+								
+								<column name="FK_idPedido_idPedido"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.LineaPedidoNH"/>
+					    </bag>
+					
+			
+		  			
+					
+							<many-to-one name="Factura" class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.FacturaNH" >
+								<column name="FK_idFactura_idFactura"/> 
+        					</many-to-one>
+					 
+						
+			
+		  			
+						<many-to-one name="MetodoPago" class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.MetodoPagoNH" >	
+								<column name="FK_idMetodoPago_idMetodoPago"/> 
+						</many-to-one>
+											 					
+			
+			
+			
+			
+			
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+		
+		 </class>	
+		  
+		  <query name="PedidoNHReadAllHQL">from PedidoNH</query>
+		  <query name="PedidoNHdamePedidosPorProductoHQL"><![CDATA[select ped FROM PedidoNH as ped inner join ped.LineaPedido as linea where linea.Producto.id = :p_idProducto]]></query>
+		</hibernate-mapping>
+	

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+		<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+		                   assembly="PracticaDSMGen.Infraestructure"
+		                   namespace="PracticaDSMGen.Infraestructure.EN.PracticaDSM">
+		    
+		    
+			
+				<class name="PerfilNH" table="Perfil"> 
+				  	
+						<id name="Id" column="idPerfil" type="integer"> 
+							<generator class="hilo"/>
+						</id>
+			
+					
+					<property name="Tema" > 
+						<column name="tema"  not-null="true"/>
+					</property>
+			
+			
+			
+		  			
+					
+							   <one-to-one name="Usuario" class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.UsuarioNH" property-ref="Perfil" />							
+					 
+						
+			
+					
+					
+					
+		
+		 </class>	
+		  
+		  <query name="PerfilNHReadAllHQL">from PerfilNH</query>
+		</hibernate-mapping>
+	

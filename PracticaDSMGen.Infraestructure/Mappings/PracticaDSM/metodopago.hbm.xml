@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+		<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+		                   assembly="PracticaDSMGen.Infraestructure"
+		                   namespace="PracticaDSMGen.Infraestructure.EN.PracticaDSM">
+		    
+		    
+			
+				<class name="MetodoPagoNH" table="MetodoPago"> 
+				  	
+						<id name="Id" column="idMetodoPago" type="integer"> 
+							<generator class="hilo"/>
+						</id>
+			
+					
+					<property name="Tipo" > 
+						<column name="tipo"  not-null="true"/>
+					</property>
+					<property name="Valido" type="boolean"> 
+						<column name="valido"  not-null="true"/>
+					</property>
+			
+			
+			
+		  			
+						<many-to-one name="Usuario" class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.UsuarioNH" >	
+								<column name="FK_email_idUsuario"/> 
+						</many-to-one>
+											 					
+			
+		  			
+						<bag name="Pedido" >
+							<key>
+							
+								
+								<column name="FK_idMetodoPago_idMetodoPago"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.PedidoNH"/>
+					    </bag>
+					
+			
+			
+					
+					
+					
+					
+					
+		
+		 </class>	
+		  
+		  <query name="MetodoPagoNHReadAllHQL">from MetodoPagoNH</query>
+		</hibernate-mapping>
+	

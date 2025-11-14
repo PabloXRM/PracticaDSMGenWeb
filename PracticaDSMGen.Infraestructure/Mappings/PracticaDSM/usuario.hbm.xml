@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+		<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+		                   assembly="PracticaDSMGen.Infraestructure"
+		                   namespace="PracticaDSMGen.Infraestructure.EN.PracticaDSM">
+		    
+		    
+			
+				<class name="UsuarioNH" table="Usuario"> 
+						<id name="Email" column="email"/> 
+			
+					
+					<property name="Nombre" type="string"> 
+						<column name="nombre"  not-null="true"/>
+					</property>
+					<property name="Direccion" type="string"> 
+						<column name="direccion"  not-null="true"/>
+					</property>
+					<property name="FechaNacimiento" type="date"> 
+						<column name="fechaNacimiento"  not-null="true"/>
+					</property>
+					<property name="CodPostal" type="integer"> 
+						<column name="codPostal"  not-null="true"/>
+					</property>
+					<property name="Pass" type="string"> 
+						<column name="pass"  not-null="true"/>
+					</property>
+			
+			
+			
+		  			
+						<bag name="Pedido" >
+							<key>
+							
+								
+								<column name="FK_email_idUsuario"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.PedidoNH"/>
+					    </bag>
+					
+			
+			
+		  			
+					
+							<many-to-one name="Perfil" class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.PerfilNH" cascade="delete">
+								<column name="FK_idPerfil_idPerfil"/> 
+        					</many-to-one>
+					 
+						
+			
+		  			
+						<bag name="Estanteria" >
+							<key>
+							
+								
+								<column name="FK_email_idUsuario"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.EstanteriaNH"/>
+					    </bag>
+					
+			
+		  			
+						<bag name="Reseña" >
+							<key>
+							
+								
+								<column name="FK_email_idUsuario"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.ReseñaNH"/>
+					    </bag>
+					
+			
+		  			
+						<bag name="Notificacion" >
+							<key>
+							
+								
+								<column name="FK_email_idUsuario"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.NotificacionNH"/>
+					    </bag>
+					
+			
+		  			
+						<bag name="MetodoPago" >
+							<key>
+							
+								
+								<column name="FK_email_idUsuario"/>
+					      	</key>
+							<one-to-many class="PracticaDSMGen.Infraestructure.EN.PracticaDSM.MetodoPagoNH"/>
+					    </bag>
+					
+			
+			
+			
+			
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+		
+		 </class>	
+		  
+		  <query name="UsuarioNHReadAllHQL">from UsuarioNH</query>
+		  <query name="UsuarioNHdamePorEstanteriaHQL"><![CDATA[select us FROM UsuarioNH as us inner join us.Estanteria as es where es.Id = :p_idEstanteria]]></query>
+		  <query name="UsuarioNHdamePorReseñaHQL"><![CDATA[select us FROM UsuarioNH as us inner join us.Reseña as res where res.Id = :p_idReseña]]></query>
+		</hibernate-mapping>
+	

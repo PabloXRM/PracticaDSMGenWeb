@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+		  <ItemGroup>
+		  
+	<EmbeddedResource Include="Mappings\PracticaDSM\usuario.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\perfil.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\metodopago.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\producto.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\reseña.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\pedido.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\lineapedido.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\factura.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\estanteria.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\notificacion.hbm.xml" />
+	<EmbeddedResource Include="Mappings\PracticaDSM\admin.hbm.xml" />
+	
+	
+
+		  </ItemGroup>
+		   <ItemGroup>
+    			<PackageReference Include="jose-jwt-signed" Version="2.3.0" />
+   				<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+   				<PackageReference Include="NHibernate" Version="5.5.2" />
+   				<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+   				
+   				<!--  /*PROTECTED REGION ID(externalLibraries) ENABLED START*/ -->
+   				<!--  /*PROTECTED REGION END*/ -->
+  		  </ItemGroup>
+		  <ItemGroup>
+		    <Content Include="hibernate.cfg.xml">
+		      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		    </Content>
+		  </ItemGroup>
+		  <ItemGroup>
+   			 <ProjectReference Include="..\PracticaDSMGen.ApplicationCore\PracticaDSMGen.ApplicationCore.csproj"/>
+   		  </ItemGroup>
+		</Project>
