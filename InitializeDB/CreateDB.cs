@@ -114,6 +114,8 @@ public static void InitializeData ()
 
                 string idUsuario = usuariocen.New_ ("prueba@gmail.com", "Prueba", null, "C/Prueba 2", new DateTime (2000, 10, 10), 03005, "prueba");
                 Console.WriteLine ("Se ha creado al usuario correctamente");
+                string idUsuario3 = usuariocen.New_("pabloalacid@gmail.com", "Pablo", null, "C/Prueba 45", new DateTime(2010, 10, 01), 03007, "pabloalacid");
+                Console.WriteLine("Se ha creado al usuario 3 correctamente");
 
                 //Login
                 if (usuariocen.Login ("prueba@gmail.com", "prueba") != null)
