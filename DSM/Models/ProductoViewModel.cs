@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
 namespace DSM.Models
@@ -24,5 +25,9 @@ namespace DSM.Models
         [RegularExpression("([0-9]+)", ErrorMessage ="Por favor introduce un numero entero para el stock del producto")]
         [Range(minimum: 0, maximum: 100000, ErrorMessage = "El stock debe ser mayor a 0 y menor a 100000")]
         public int Stock { get; set; }
+        public FormatoEnum Formato { get; internal set; }
+        public EstiloEnum Estilo { get; internal set; }
+        public string Fotos { get; internal set; }
+        public string Artista { get; internal set; }
     }
 }

@@ -15,7 +15,17 @@ namespace PracticaDSMGen.ApplicationCore.CEN.PracticaDSM
 {
 public partial class ProductoCEN
 {
-public void DecrementarStock (int p_oid, int p_cantidad)
+        public void Borrar(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Crear(string descripcion, decimal precio, int stock)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DecrementarStock (int p_oid, int p_cantidad)
 {
         /*PROTECTED REGION ID(PracticaDSMGen.ApplicationCore.CEN.PracticaDSM_Producto_decrementarStock) ENABLED START*/
 
