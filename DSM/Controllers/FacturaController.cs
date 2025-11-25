@@ -1,14 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DSM.Assemblers;
+using DSM.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
+using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DSM.Controllers
 {
-    public class FacturaController : Controller
+    public class FacturaController : BasicController
     {
         // GET: FacturaController
         public ActionResult Index()
         {
-            return View();
+            SessionInitialize();
+            FacturaRepository facRepository = new FacturaRepository(session);
+            FacturaCEN facCEN = new FacturaCEN(facRepository);
+
+            IList<FacturaEN> listEN = facCEN.ReadAll(0, -1);
+
+            IEnumerable<FacturaViewModel> listArts =
+                new FacturaAssembler().ConvertListENToViewModel(listEN).ToList();
+
+            SessionClose();
+
+            return View(listArts);
         }
 
         // GET: FacturaController/Details/5
@@ -26,15 +45,40 @@ namespace DSM.Controllers
         // POST: FacturaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(FacturaViewModel fac)
         {
+            if (!ModelState.IsValid)
+            {
+                // Hay errores de validación → volvemos a la vista mostrando mensajes
+                return View(fac);
+            }
+
             try
             {
+                FacturaRepository facRepo = new FacturaRepository();
+                FacturaCEN facCEN = new FacturaCEN(facRepo);
+
+                /* Valores por defecto para los campos que no se piden en el formulario
+                var valoracionPorDefecto = "0/10";
+                var visitasPorDefecto = 0;
+                var visibilidadPorDefecto = true;
+                */
+
+                //No quiero introducir valoracion, visitas y visibilidad, quiero que sea default
+                facCEN.New_(
+                   00001,  //Recuperar id de un pedido??
+                   fac.Numero,
+                   fac.ImporteTotal,
+                   fac.Fecha
+                );
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Mostrar el error en la propia página
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(fac);
             }
         }
 

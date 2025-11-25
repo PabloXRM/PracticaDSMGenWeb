@@ -1,14 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DSM.Assemblers;
+using DSM.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
+using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DSM.Controllers
 {
-    public class MetodoPagoController : Controller
+    public class MetodoPagoController : BasicController
     {
         // GET: MetodoPagoController
         public ActionResult Index()
         {
-            return View();
+            SessionInitialize();
+            MetodoPagoRepository metRepository = new MetodoPagoRepository(session);
+            MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepository);
+
+            IList<MetodoPagoEN> listEN = metCEN.ReadAll(0, -1);
+
+            IEnumerable<MetodoPagoViewModel> listArts =
+                new MetodoPagoAssembler().ConvertListENToViewModel(listEN).ToList();
+
+            SessionClose();
+
+            return View(listArts);
         }
 
         // GET: MetodoPagoController/Details/5
@@ -26,15 +45,39 @@ namespace DSM.Controllers
         // POST: MetodoPagoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(MetodoPagoViewModel met)
         {
+            if (!ModelState.IsValid)
+            {
+                // Hay errores de validación → volvemos a la vista mostrando mensajes
+                return View(met);
+            }
+
             try
             {
+                MetodoPagoRepository metRepo = new MetodoPagoRepository();
+                MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
+
+                /* Valores por defecto para los campos que no se piden en el formulario
+                var valoracionPorDefecto = "0/10";
+                var visitasPorDefecto = 0;
+                var visibilidadPorDefecto = true;
+                */
+
+                //No quiero introducir valoracion, visitas y visibilidad, quiero que sea default
+                metCEN.New_(
+                   "prueba@gmail.com",  //Recuperar email de un usuario??
+                   met.TipoPago, //Me lo crea en 0 por defecto
+                   met.Valido
+                );
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Mostrar el error en la propia página
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(met);
             }
         }
 
