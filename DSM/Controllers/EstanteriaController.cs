@@ -34,7 +34,15 @@ namespace DSM.Controllers
         // GET: EstanteriaController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            SessionInitialize();
+            EstanteriaRepository estRepo = new EstanteriaRepository(session);
+            EstanteriaCEN estCEN = new EstanteriaCEN(estRepo);
+
+            EstanteriaEN estEN = estCEN.ReadOID(id);
+            EstanteriaViewModel estView = new EstanteriaAssembler().ConvertENToModelUI(estEN);
+
+            SessionClose();
+            return View(estView);
         }
 
         // GET: EstanteriaController/Create
@@ -87,28 +95,59 @@ namespace DSM.Controllers
         // GET: EstanteriaController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            SessionInitialize();
+            EstanteriaRepository estRepo = new EstanteriaRepository(session);
+            EstanteriaCEN estCEN = new EstanteriaCEN(estRepo);
+
+            EstanteriaEN estEN = estCEN.ReadOID(id);
+            EstanteriaViewModel estView = new EstanteriaAssembler().ConvertENToModelUI(estEN);
+
+            SessionClose();
+            return View(estView);
         }
 
         // POST: EstanteriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(EstanteriaViewModel est)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(est);
+            }
+
             try
             {
+                EstanteriaRepository estRepo = new EstanteriaRepository();
+                EstanteriaCEN estCEN = new EstanteriaCEN(estRepo);
+
+                // Usamos los valores de la BD para los campos que no se editan en el formulario
+                estCEN.Modify(
+                    est.Id,
+                    est.Descripcion,
+                    est.Valoracion,
+                    est.Visitas
+                );
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                var msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                ModelState.AddModelError(string.Empty, msg);
+                return View(est);
             }
         }
 
         // GET: EstanteriaController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            EstanteriaRepository estRepo = new EstanteriaRepository();
+            EstanteriaCEN estCEN = new EstanteriaCEN(estRepo);
+            estCEN.Destroy(id);
+
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: EstanteriaController/Delete/5

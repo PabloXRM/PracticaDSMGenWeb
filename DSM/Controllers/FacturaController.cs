@@ -2,6 +2,7 @@
 using DSM.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHibernate.Mapping;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
 using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
 using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
@@ -33,7 +34,15 @@ namespace DSM.Controllers
         // GET: FacturaController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            SessionInitialize();
+            FacturaRepository facRepo = new FacturaRepository(session);
+            FacturaCEN facCEN = new FacturaCEN(facRepo);
+
+            FacturaEN facEN = facCEN.ReadOID(id);
+            FacturaViewModel facView = new FacturaAssembler().ConvertENToModelUI(facEN);
+
+            SessionClose();
+            return View(facView);
         }
 
         // GET: FacturaController/Create
@@ -85,28 +94,59 @@ namespace DSM.Controllers
         // GET: FacturaController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            SessionInitialize();
+            FacturaRepository facRepo = new FacturaRepository(session);
+            FacturaCEN facCEN = new FacturaCEN(facRepo);
+
+            FacturaEN facEN = facCEN.ReadOID(id);
+            FacturaViewModel facView = new FacturaAssembler().ConvertENToModelUI(facEN);
+
+            SessionClose();
+            return View(facView);
         }
 
         // POST: FacturaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(FacturaViewModel fac)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(fac);
+            }
+
             try
             {
+                FacturaRepository facRepo = new FacturaRepository();
+                FacturaCEN facCEN = new FacturaCEN(facRepo);
+
+                // Usamos los valores de la BD para los campos que no se editan en el formulario
+                facCEN.Modify(
+                fac.Id,
+                fac.Numero,
+                fac.ImporteTotal,
+                fac.Fecha
+                );
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                var msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                ModelState.AddModelError(string.Empty, msg);
+                return View(fac);
             }
         }
 
         // GET: FacturaController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            FacturaRepository facRepo = new FacturaRepository();
+            FacturaCEN facCEN = new FacturaCEN(facRepo);
+            facCEN.Destroy(id);
+
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: FacturaController/Delete/5

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
 using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using PracticaDSMGen.ApplicationCore.IRepository.PracticaDSM;
 using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,15 @@ namespace DSM.Controllers
         // GET: MetodoPagoController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            SessionInitialize();
+            MetodoPagoRepository metRepo = new MetodoPagoRepository(session);
+            MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
+
+            MetodoPagoEN metEN = metCEN.ReadOID(id);
+            MetodoPagoViewModel metView = new MetodoPagoAssembler().ConvertENToModelUI(metEN);
+
+            SessionClose();
+            return View(metView);
         }
 
         // GET: MetodoPagoController/Create
@@ -84,28 +93,57 @@ namespace DSM.Controllers
         // GET: MetodoPagoController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            SessionInitialize();
+            MetodoPagoRepository metRepo = new MetodoPagoRepository(session);
+            MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
+
+            MetodoPagoEN metEN = metCEN.ReadOID(id);
+            MetodoPagoViewModel metView = new MetodoPagoAssembler().ConvertENToModelUI(metEN);
+
+            SessionClose();
+            return View(metView);
         }
 
         // POST: MetodoPagoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(MetodoPagoViewModel met)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(met);
+            }
+
             try
             {
+                MetodoPagoRepository metRepo = new MetodoPagoRepository();
+                MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
+
+                metCEN.Modify(
+                met.Id,
+                met.TipoPago,
+                met.Valido
+                );
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                var msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                ModelState.AddModelError(string.Empty, msg);
+                return View(met);
             }
         }
 
         // GET: MetodoPagoController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            MetodoPagoRepository metRepo = new MetodoPagoRepository();
+            MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
+            metCEN.Destroy(id);
+
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: MetodoPagoController/Delete/5
