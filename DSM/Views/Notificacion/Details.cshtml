@@ -1,0 +1,27 @@
+@model DSM.Models.NotificacionViewModel
+
+@{
+    ViewData["Title"] = "Detalle notificación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalle</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Tipo)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Tipo)</dd>
+
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Fecha)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Fecha)</dd>
+
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Titulo)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Titulo)</dd>
+
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Descripcion)</dd>
+</dl>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Index">Volver a la lista</a>
+</p>

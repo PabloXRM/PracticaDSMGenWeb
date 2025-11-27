@@ -1,0 +1,37 @@
+ DSM\Views\LineaPedido\Index.cshtml
+@model IEnumerable<DSM.Models.LineaPedidoViewModel>
+
+    @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h1>Líneas de pedido</h1>
+
+    <p>
+        <a asp-action="Create">Crear nueva</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().Num)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Cantidad)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Precio)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Num)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                <td>@Html.DisplayFor(modelItem => item.Precio)</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Num }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.Num }) |
+                    @Html.ActionLink("Borrar", "Delete", new { id = item.Num })
+                </td>
+            </tr>
+}
+        </tbody>
+    </table>

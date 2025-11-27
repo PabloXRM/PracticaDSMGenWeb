@@ -1,0 +1,47 @@
+ DSM\Views\Pedido\Ver.cshtml
+@model DSM.Models.PedidoViewModel
+
+@{
+    ViewData["Title"] = "Ver pedido";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalles del pedido</h1>
+
+<div>
+    <h4>Pedido</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Numero)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Numero)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.TotalPrecio)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.TotalPrecio)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Fecha)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Fecha)</dd>
+    </dl>
+</div>
+
+<h3>Líneas</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Lineas.First().Num)</th>
+            <th>@Html.DisplayNameFor(model => model.Lineas.First().Cantidad)</th>
+            <th>@Html.DisplayNameFor(model => model.Lineas.First().Precio)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var linea in Model.Lineas)
+    {
+        <tr>
+            <td>@Html.DisplayFor(m => linea.Num)</td>
+            <td>@Html.DisplayFor(m => linea.Cantidad)</td>
+            <td>@Html.DisplayFor(m => linea.Precio)</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-action="Index">Volver</a>

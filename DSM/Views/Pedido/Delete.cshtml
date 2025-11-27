@@ -1,0 +1,34 @@
+@model DSM.Models.PedidoViewModel
+
+@{
+    ViewData["Title"] = "Borrar Pedido";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>¿Borrar pedido @Model.Numero ?</h1>
+
+<div>
+    <h4>Resumen del pedido</h4>
+    <dl class="row">
+        <dt class="col-sm-2">Número</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(m => m.Numero)</dd>
+
+        <dt class="col-sm-2">Fecha</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(m => m.Fecha)</dd>
+
+        <dt class="col-sm-2">Precio total</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(m => m.TotalPrecio)</dd>
+
+        <dt class="col-sm-2">Estado</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(m => m.EstadoPedido)</dd>
+
+        <dt class="col-sm-2">Carrito</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(m => m.Carrito)</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Borrar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

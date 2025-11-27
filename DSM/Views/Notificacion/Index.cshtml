@@ -1,0 +1,36 @@
+@model IEnumerable<DSM.Models.NotificacionViewModel>
+
+@{
+    ViewData["Title"] = "Notificaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Notificaciones</h1>
+
+<p>
+    <a asp-action="Create">Crear nueva</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Tipo)</th>
+            <th>@Html.DisplayNameFor(model => model.Fecha)</th>
+            <th>@Html.DisplayNameFor(model => model.Titulo)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Tipo)</td>
+            <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
+            <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
