@@ -66,5 +66,10 @@ public System.Collections.Generic.IList<LineaPedidoEN> ReadAll (int first, int s
         list = _ILineaPedidoRepository.ReadAll (first, size);
         return list;
 }
-}
+
+        public void New_(int idPedido, int cantidad, decimal precio)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -145,15 +145,29 @@ public virtual string Fotos {
 
 
 
-public virtual string Artista {
-        get { return artista; } set { artista = value;  }
-}
+        public virtual string Artista
+        {
+            get { return artista; }
+            set { artista = value; }
+        }
+
+        private object proveedor;
+        private object proveedor2;
+
+        public virtual object Proveedor
+        {
+            get { return proveedor; }
+            set { proveedor = value; }
+        }
+
+        public virtual object Proveedor2
+        {
+            get { return proveedor2; }
+            set { proveedor2 = value; }
+        }
 
 
-
-
-
-public ProductoEN()
+        public ProductoEN()
 {
         reseña = new System.Collections.Generic.List<PracticaDSMGen.ApplicationCore.EN.PracticaDSM.ReseñaEN>();
         estanteria = new System.Collections.Generic.List<PracticaDSMGen.ApplicationCore.EN.PracticaDSM.EstanteriaEN>();

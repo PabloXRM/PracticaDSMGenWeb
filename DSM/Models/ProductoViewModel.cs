@@ -29,5 +29,14 @@ namespace DSM.Models
         public EstiloEnum Estilo { get; internal set; }
         public string Fotos { get; internal set; }
         public string Artista { get; internal set; }
+
+        [Display (Prompt = "Nombre del proveedor", Description = "Nombre del proveedor", Name = "NombreProveedor")]
+
+        public string NombreProveedor { get; set; }
+
+        [ScaffoldColumn(false)]
+
+        public int IdProveedor { get; set; }
+        public int Proveedor { get; set; }
     }
 }
