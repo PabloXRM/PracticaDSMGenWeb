@@ -1,12 +1,22 @@
-﻿using DSM.Models;
+﻿using DSM; // <-- para que reconozca SessionExtensions
+using DSM.Models;
+using DSM.Assemblers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHibernate.Impl;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
 using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 
+using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+
 namespace DSM.Controllers
 {
-    public class UsuarioController : Controller
+    public class UsuarioController : BasicController
     {
 
         // GET: UsuarioController/Login
@@ -29,6 +39,11 @@ namespace DSM.Controllers
             }
             else
             {
+                SessionInitialize();
+                UsuarioEN usuEN = usuCEN.ReadOID(login.DNI);
+                UsuarioViewModel usuVM = new UsuarioAssembler().ConvertirENToViewModel(usuEN);
+                HttpContext.Session.Set<UsuarioViewModel>("usuario", usuVM);
+                SessionClose();
                 return RedirectToAction("Index", "Home");
             }
 

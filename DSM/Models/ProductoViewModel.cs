@@ -1,4 +1,5 @@
-﻿using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM;
+﻿using Microsoft.AspNetCore.Http;
+using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM;
 using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
@@ -27,7 +28,11 @@ namespace DSM.Models
         public int Stock { get; set; }
         public FormatoEnum Formato { get; internal set; }
         public EstiloEnum Estilo { get; internal set; }
-        public string Fotos { get; internal set; }
+        public string Fotos { get; set; }
+        [Display(Prompt = "Imagen", Description = "Imagen del producto", Name = "Imagen")]
+        public IFormFile Fichero { get; set; }
         public string Artista { get; internal set; }
+
+        
     }
 }

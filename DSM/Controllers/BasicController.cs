@@ -11,7 +11,7 @@ namespace DSM.Controllers
 {
     public class BasicController:Controller
     {
-        private ISession sessionInside;
+        private NHibernate.ISession sessionInside;
 
 
         protected SessionCPNHibernate session;
