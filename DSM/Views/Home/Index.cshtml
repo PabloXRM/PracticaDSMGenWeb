@@ -1,48 +1,83 @@
-﻿@model IEnumerable<PracticaDSMGen.ApplicationCore.EN.PracticaDSM.ProductoEN>
-@{
-    ViewData["Title"] = "Página principal";
+﻿@{
+    ViewData["Title"] = "Novedades";
 }
 
-<div class="text-center">
-    <h1 class="display-4">TempoShop</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Descripcion)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Precio)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Stock)
-                </th>
+<section class="hero">
+    <div class="hero-static">
+        <img src="~/img/v.jpg" alt="Promoción destacada" />
+    </div>
+    <div class="hero-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+</section>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descripcion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Precio)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Stock)
-                    </td>
+<section class="section section-reserve">
+    <div class="section-header">
+        <h2>Reserva el último disco de Xxxxx</h2>
+    </div>
 
-                </tr>
-            }
-        </tbody>
+    <div class="cards-row">
+        <article class="disc-card">
+            <img src="~/img/cd1.png" alt="Disco 1" />
+        </article>
+        <article class="disc-card">
+            <img src="~/img/cd1.png" alt="Disco 2" />
+        </article>
+        <article class="disc-card">
+            <img src="~/img/cd1.png" alt="Disco 3" />
+        </article>
+        <article class="disc-card">
+            <img src="~/img/cd1.png" alt="Disco 4" />
+        </article>
+    </div>
 
-    </table>
-</div>
+    <div class="section-cta">
+        <button class="btn primary-btn">Descubre más</button>
+    </div>
+</section>
+
+<section class="section section-offers">
+    <div class="section-header section-header-row">
+        <h2>Ofertas</h2>
+        <button class="btn ghost-btn">Ver todo</button>
+    </div>
+
+    <div class="cards-row small">
+        <article class="disc-card">
+            <img src="~/img/cd6.png" alt="Oferta 1" />
+        </article>
+        <article class="disc-card">
+            <img src="~/img/cd6.png" alt="Oferta 2" />
+        </article>
+        <article class="disc-card">
+            <img src="~/img/cd6.png" alt="Oferta 3" />
+        </article>
+    </div>
+</section>
+
+<section class="section section-novedades">
+    <div class="section-inner">
+        <div class="section-header section-header-row">
+            <h2>Novedades</h2>
+            <button class="btn ghost-btn">Ver todo</button>
+        </div>
+
+        <div class="cards-row">
+            <article class="disc-card">
+                <img src="~/img/cd8.png" alt="Novedad 1" />
+            </article>
+            <article class="disc-card">
+                <img src="~/img/cd9.png" alt="Novedad 2" />
+            </article>
+            <article class="disc-card">
+                <img src="~/img/cd10.png" alt="Novedad 3" />
+            </article>
+            <article class="disc-card">
+                <img src="~/img/cd11.png" alt="Novedad 4" />
+            </article>
+        </div>
+    </div>
+</section>

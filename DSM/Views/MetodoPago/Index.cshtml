@@ -1,42 +1,61 @@
 ﻿@model IEnumerable<DSM.Models.MetodoPagoViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Métodos de pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Métodos de pago</h1>
+<section class="section section-pay-hero">
+    <div class="section-inner">
+        <header class="section-header section-header-row">
+            <div>
+                <span class="section-kicker">Opciones disponibles</span>
+                <h2>Métodos de pago</h2>
+            </div>
 
-<p>
-    <a asp-action="Create">Crear nuevo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoPago)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valido)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoPago)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valido)
-            </td>
-            <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            <div class="pay-hero-actions">
+                <a asp-action="Create" class="btn primary-btn btn-sm">
+                    + Crear método de pago
+                </a>
+            </div>
+        </header>
+
+        <p class="section-subtitle">
+            Gestiona las formas de pago disponibles y su estado de validez.
+        </p>
+    </div>
+</section>
+
+<section class="section section-pay-list">
+    <div class="section-inner">
+        @if (Model == null || !Model.Any())
+        {
+            <p>No hay métodos de pago registrados.</p>
+        }
+        else
+        {
+            <div class="pay-grid">
+                @foreach (var item in Model)
+                {
+                    <article class="pay-card">
+
+                        <header class="pay-card-header">
+                            <h3 class="pay-title">@item.TipoPago</h3>
+
+                            <span class="pay-valid @(item.Valido ? "pay-valid--on" : "pay-valid--off")">
+                                @(item.Valido ? "Habilitado" : "Deshabilitado")
+                            </span>
+                        </header>
+
+                        <div class="pay-actions">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn ghost-btn btn-sm">Detalles</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn primary-btn btn-sm">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                               class="btn ghost-btn btn-sm pay-delete">Borrar</a>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

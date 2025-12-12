@@ -1,54 +1,80 @@
 ﻿@model IEnumerable<DSM.Models.EstanteriaViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Estanterías";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Estanterías virtuales</h1>
+<section class="section section-shelf-hero">
+    <div class="section-inner">
+        <header class="section-header section-header-row">
+            <div>
+                <span class="section-kicker">Colecciones guardadas</span>
+                <h2>Estanterías virtuales</h2>
+            </div>
 
-<p>
-    <a asp-action="Create">Crear nuevo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valoracion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Visitas)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Visible)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valoracion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Visitas)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Visible)
-            </td>
-            <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            <div class="shelf-hero-actions">
+                <a asp-action="Create" class="btn primary-btn btn-sm">
+                    + Crear nueva estantería
+                </a>
+            </div>
+        </header>
+
+        <p class="section-subtitle">
+            Organiza tus vinilos y CDs en estanterías virtuales, consulta su valoración y número de visitas.
+        </p>
+    </div>
+</section>
+
+<section class="section section-shelf-list">
+    <div class="section-inner">
+        @if (Model == null || !Model.Any())
+        {
+            <p>No hay estanterías creadas.</p>
+        }
+        else
+        {
+            <div class="shelf-grid">
+                @foreach (var item in Model)
+                {
+                    <article class="shelf-card">
+                        <header class="shelf-card-header">
+                            <h3 class="shelf-title">@item.Descripcion</h3>
+
+                            <span class="shelf-visibility @(item.Visible ? "shelf-visibility--on" : "shelf-visibility--off")">
+                                @(item.Visible ? "Visible" : "Oculta")
+                            </span>
+                        </header>
+
+                        <div class="shelf-meta">
+                            <div class="shelf-meta-block">
+                                <span class="shelf-label">Valoración</span>
+                                <span class="shelf-value">
+                                    @(!string.IsNullOrEmpty(item.Valoracion) ? item.Valoracion : "Sin valoración")
+                                </span>
+                            </div>
+
+                            <div class="shelf-meta-block">
+                                <span class="shelf-label">Visitas</span>
+                                <span class="shelf-value">@item.Visitas</span>
+                            </div>
+                        </div>
+
+                        <div class="shelf-actions">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn ghost-btn btn-sm">
+                                Detalles
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn primary-btn btn-sm">
+                                Editar
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                               class="btn ghost-btn btn-sm shelf-delete">
+                                Borrar
+                            </a>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

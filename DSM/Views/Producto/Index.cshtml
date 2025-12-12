@@ -1,48 +1,75 @@
 ﻿@model IEnumerable<DSM.Models.ProductoViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Productos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>PRODUCTOS</h1>
+<section class="section section-product-hero">
+    <div class="section-inner">
+        <header class="section-header section-header-row">
+            <div>
+                <span class="section-kicker">Catálogo completo</span>
+                <h2>Productos</h2>
+            </div>
 
-<p>
-    <a asp-action="Create">Crear nuevo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Precio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Precio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            <div class="product-hero-actions">
+                <a asp-action="Create" class="btn primary-btn btn-sm">
+                    + Crear nuevo producto
+                </a>
+            </div>
+        </header>
+
+        <p class="section-subtitle">
+            Gestiona todos los vinilos, CDs y coleccionables del catálogo.
+        </p>
+    </div>
+</section>
+
+<section class="section section-product-list">
+    <div class="section-inner">
+
+        @if (Model == null || !Model.Any())
+        {
+            <p>No hay productos disponibles.</p>
+        }
+        else
+        {
+            <div class="cards-row product-grid">
+                @foreach (var item in Model)
+                {
+                    <article class="disc-card product-card">
+
+                        <div class="product-image-wrapper">
+                            <img src="~/img/cd1.png" alt="@item.Descripcion" />
+                        </div>
+
+                        <div class="disc-info product-info">
+                            <h3>@item.Descripcion</h3>
+
+                            <div class="product-meta">
+                                <span class="disc-price">
+                                    @String.Format("{0:0.00} €", item.Precio)
+                                </span>
+
+                                <span class="product-stock @(item.Stock > 0 ? "product-stock--ok" : "product-stock--out")">
+                                    @(item.Stock > 0 ? $"Stock: {item.Stock}" : "Sin stock")
+                                </span>
+                            </div>
+
+                            <div class="product-actions">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn ghost-btn btn-sm">Detalles</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn primary-btn btn-sm">Editar</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn ghost-btn btn-sm product-delete">
+                                    Borrar
+                                </a>
+                            </div>
+                        </div>
+
+                    </article>
+                }
+            </div>
+        }
+
+    </div>
+</section>
