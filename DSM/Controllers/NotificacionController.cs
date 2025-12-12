@@ -23,35 +23,26 @@ namespace DSM.Controllers
             NotificacionRepository notiRepo = new NotificacionRepository(session);
             NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-            IList<NotificacionEN> listEN = notiCEN.ReadAll(0, -1);
 
-            IEnumerable<NotificacionViewModel> list =
-                new NotificacionAssembler().ConvertListENToViewModel(listEN).ToList();
 
             SessionClose();
 
-            return View(list);
         }
 
         // GET: NotificacionController/Details/5
         public ActionResult Details(int id)
         {
             SessionInitialize();
-            NotificacionRepository notiRepo = new NotificacionRepository(session);
-            NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-            NotificacionEN notiEN = notiCEN.ReadOID(id);
-            NotificacionViewModel notiView = new NotificacionAssembler().ConvertENToModelUI(notiEN);
 
+            NotificacionViewModel vm = new NotificacionAssembler().ConvertENToModelUI(en);
             SessionClose();
-
-            return View(notiView);
         }
 
         // GET: NotificacionController/Create
         public ActionResult Create()
         {
-            CargarTipos();   // método auxiliar
+            CargarTipos();   // m�todo auxiliar
             return View();
         }
 
@@ -72,38 +63,18 @@ namespace DSM.Controllers
         // POST: NotificacionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(NotificacionViewModel noti)
         {
-            if (!ModelState.IsValid)
             {
-                CargarTipos();
-                return View(noti);
             }
 
+            SessionInitialize();
             try
             {
-                NotificacionRepository notiRepo = new NotificacionRepository();
-                NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-                string emailUsuario = "cliente@demo.com";
-                DateTime? fecha = noti.Fecha ?? DateTime.Now;
-
-                notiCEN.New_(
-                    emailUsuario,
-                    noti.Tipo,        // ← valor del SELECT
-                    fecha,
-                    noti.Titulo,
-                    noti.Descripcion,
-                    noti.Fotos
-                );
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
             {
-                var msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                ModelState.AddModelError(string.Empty, msg);
-                return View(noti);
             }
         }
 
@@ -111,57 +82,33 @@ namespace DSM.Controllers
         public ActionResult Edit(int id)
         {
             SessionInitialize();
-            NotificacionRepository notiRepo = new NotificacionRepository(session);
-            NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-            NotificacionEN notiEN = notiCEN.ReadOID(id);
-            NotificacionViewModel notiView = new NotificacionAssembler().ConvertENToModelUI(notiEN);
 
+            NotificacionViewModel vm = new NotificacionAssembler().ConvertENToModelUI(en);
             SessionClose();
-            return View(notiView);
         }
 
         // POST: NotificacionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(NotificacionViewModel noti)
         {
-            if (!ModelState.IsValid)
             {
-                return View(noti);
             }
 
+            SessionInitialize();
             try
             {
-                NotificacionRepository notiRepo = new NotificacionRepository();
-                NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-
-                notiCEN.Modify(
-                    noti.Id,
-                    noti.Tipo,
-                    noti.Fecha,
-                    noti.Titulo,
-                    noti.Descripcion,
-                    noti.Fotos
-                );
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
             {
-                var msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                ModelState.AddModelError(string.Empty, msg);
-                return View(noti);
             }
         }
 
         // GET: NotificacionController/Delete/5
         public ActionResult Delete(int id)
         {
-            NotificacionRepository notiRepo = new NotificacionRepository();
-            NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
-            notiCEN.Destroy(id);
 
             return RedirectToAction(nameof(Index));
         }

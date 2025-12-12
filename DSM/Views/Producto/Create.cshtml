@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Crear producto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <section class="section form-page">
@@ -35,10 +36,8 @@
                     <span asp-validation-for="Stock" class="form-error"></span>
                 </div>
             </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn primary-btn">Guardar producto</button>
-                <a asp-action="Index" class="btn ghost-btn">Volver a la lista</a>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

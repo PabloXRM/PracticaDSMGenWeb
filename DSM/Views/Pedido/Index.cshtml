@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DSM.Models.PedidoViewModel>
+
+    @{
+    ViewData["Title"] = "Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h1>Pedidos</h1>
+
+    <p>
+        <a asp-action="Create">Crear nuevo</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Numero)</th>
+                <th>@Html.DisplayNameFor(model => model.Fecha)</th>
+                <th>@Html.DisplayNameFor(model => model.TotalPrecio)</th>
+                <th>@Html.DisplayNameFor(model => model.EstadoPedido)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Numero)</td>
+                <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
+                <td>@Html.DisplayFor(modelItem => item.TotalPrecio)</td>
+                <td>@Html.DisplayFor(modelItem => item.EstadoPedido)</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+}
+        </tbody>
+    </table>

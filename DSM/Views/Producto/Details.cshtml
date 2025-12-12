@@ -42,20 +42,24 @@
             @Html.DisplayFor(model => model.Estilo)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fotos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fotos)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Artista)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Artista)
         </dd>
+        @if (Model != null && Model.Fotos != null)
+        {
+            <dd class="col-sm-10">
+                <img src="@Html.DisplayFor(model => model.Fotos)" height="150" width="150" />
+
+            </dd>
+        }
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+@if (Model != null)
+{
+    <div>
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+        <a asp-action="Index">Volver a la lista</a>
+    </div>
+}

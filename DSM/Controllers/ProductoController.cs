@@ -10,11 +10,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DSM.Controllers
 {
     public class ProductoController : BasicController
-    {
+    { 
+    private readonly IWebHostEnvironment _webHost;
+
+        public ProductoController(IWebHostEnvironment webHost)
+        {
+            _webHost = webHost;
+
+        }
         // GET: ProductoController
         public ActionResult Index()
         {
@@ -56,23 +66,36 @@ namespace DSM.Controllers
         // POST: ProductoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProductoViewModel art)
+        public async Task<ActionResult> CreateAsync(ProductoViewModel art)
         {
-            if (!ModelState.IsValid)
+            string fileName = "", path = "";
+            if (art.Fichero != null && art.Fichero.Length > 0)
             {
-                // Hay errores de validación → volvemos a la vista mostrando mensajes
-                return View(art);
+                fileName = Path.GetFileName(art.Fichero.FileName).Trim();
+
+                string directory = _webHost.WebRootPath + "/Images";
+                path = Path.Combine((directory), fileName);
+
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (var stream = System.IO.File.Create(path))
+                {
+                    await art.Fichero.CopyToAsync(stream);
+                }
             }
 
             try
             {
+                fileName = "/Images/" + fileName;
                 ProductoRepository artRepo = new ProductoRepository();
                 ProductoCEN artCEN = new ProductoCEN(artRepo);
 
                 // Valores por defecto para los campos que no se piden en el formulario
                 var formatoPorDefecto = FormatoEnum.cd;
                 var estiloPorDefecto = EstiloEnum.pop;
-                var fotoPorDefecto = "default.png";
                 var artistaPorDefecto = "Artista desconocido";
 
                 artCEN.New_(
@@ -81,8 +104,9 @@ namespace DSM.Controllers
                     art.Stock,
                     formatoPorDefecto,
                     estiloPorDefecto,
-                    fotoPorDefecto,
+                    fileName,
                     artistaPorDefecto
+                    
                 );
 
                 return RedirectToAction(nameof(Index));

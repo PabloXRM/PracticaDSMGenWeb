@@ -1,0 +1,40 @@
+@model DSM.Models.ResenaViewModel
+@{
+    ViewData["Title"] = "Eliminar reseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Eliminar Reseña</h1>
+
+<h3>¿Seguro que desea eliminar esta reseña?</h3>
+<div>
+    <h4>Reseña</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Producto</dt>
+        <dd class="col-sm-10">@Model.ProductoId</dd>
+
+        <dt class="col-sm-2">Usuario</dt>
+        <dd class="col-sm-10">@Model.UsuarioEmail</dd>
+
+        <dt class="col-sm-2">Nota</dt>
+        <dd class="col-sm-10">@Model.Nota</dd>
+
+        <dt class="col-sm-2">Fecha</dt>
+        <dd class="col-sm-10">@Model.Fecha.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-2">Descripción</dt>
+        <dd class="col-sm-10">@Model.Descripcion</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group mt-2">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

@@ -4,73 +4,44 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - TempoShop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;600;700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-
-    <!-- Si sigues usando Bootstrap/site.css, ponlos ANTES: -->
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
-    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
-
-    <!-- Tu CSS debe ir el ÚLTIMO -->
-    <link rel="stylesheet" href="~/css/global.css" />
-
-    @RenderSection("Styles", required: false)
+    <title>@ViewData["Title"] - DSM</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
 <body>
-    <header class="site-header">
-        <!-- Barra superior de novedades -->
-        <div class="topbar topbar-news">
-            <div class="topbar-inner topbar-inner--thin">
-                <nav class="news-nav">
-                    <a asp-controller="Home" asp-action="Index" class="news-pill">
-                        <strong>NOVEDADES</strong>
-                    </a>
-                    <span class="news-text">
-                        Lo último en vinilos · Envío 24h ·
-                        <span style="color: rgb(179, 0, 0);">50% en productos seleccionados</span>
-                    </span>
-                </nav>
-            </div>
-        </div>
-
-        <!-- Barra inferior: logo + menú + iconos -->
-        <div class="topbar topbar-main">
-            <div class="topbar-inner">
-                <a asp-controller="Home" asp-action="Index" class="logo-link">
-                    <img src="~/img/nuevo.png" alt="TempoShop" class="logo" />
-                </a>
-
-                <nav class="main-menu">
-                    <a asp-controller="Home" asp-action="Index">Home</a>
-                    <a asp-controller="Producto" asp-action="Index">Productos</a>
-                    <a asp-controller="Factura" asp-action="Index">Facturas</a>
-                    <a asp-controller="Estanteria" asp-action="Index">Estantería</a>
-                    <a asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a>
-                    <a asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </nav>
-
-                <div class="header-icons">
-                    <button class="icon-btn" aria-label="Carrito">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                    </button>
-                    <button class="icon-btn" aria-label="Favoritos">
-                        <span class="material-symbols-outlined">favorite</span>
-                    </button>
-                    <button class="icon-btn" aria-label="Buscar">
-                        <span class="material-symbols-outlined">search</span>
-                    </button>
-                    <button class="icon-btn" aria-label="Cuenta">
-                        <span class="material-symbols-outlined">account_circle</span>
-                    </button>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DSM</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Factura" asp-action="Index">Facturas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Estanteria" asp-action="Index">Estanteria</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="MetodoPago" asp-action="Index">MetodoPagos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     </header>
 
     <div class="page-wrapper">
@@ -104,4 +75,3 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
-

@@ -1,0 +1,42 @@
+@model DSM.Models.ResenaViewModel
+@{
+    ViewData["Title"] = "Editar reseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Editar Reseña</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="ProductoId" class="control-label"></label>
+        <input asp-for="ProductoId" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="UsuarioEmail" class="control-label"></label>
+        <input asp-for="UsuarioEmail" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Nota" class="control-label"></label>
+        <input asp-for="Nota" class="form-control" />
+        <span asp-validation-for="Nota" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Fecha" class="control-label"></label>
+        <input asp-for="Fecha" class="form-control" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descripcion" class="control-label"></label>
+        <textarea asp-for="Descripcion" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-2">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

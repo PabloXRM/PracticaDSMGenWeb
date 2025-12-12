@@ -1,6 +1,8 @@
-﻿using DSM.Models;
+﻿using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using DSM.Models;
 using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DSM.Assemblers
 {
@@ -23,14 +25,8 @@ namespace DSM.Assemblers
             return noti;
         }
 
-        public IList<NotificacionViewModel> ConvertListENToViewModel(IList<NotificacionEN> ens)
         {
-            IList<NotificacionViewModel> list = new List<NotificacionViewModel>();
-            foreach (NotificacionEN en in ens)
-            {
-                list.Add(ConvertENToModelUI(en));
-            }
-            return list;
+        }
         }
     }
 }
