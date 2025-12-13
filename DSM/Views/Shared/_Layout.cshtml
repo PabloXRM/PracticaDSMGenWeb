@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using DSM.Models
+@{
+    var u = Context.Session.Get<UsuarioViewModel>("usuario");
+}
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -28,19 +33,30 @@
                     <span id="logo-text" style="display:none;font-weight:700;font-size:1.1rem;color:var(--color-primary);">DSM</span>
                 </a>
 
-                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white">
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm @(u?.Rol == "Admin" ? "navbar-admin" : "navbar-light bg-white")">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="main-menu navbar-nav flex-grow-1">
+
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Factura" asp-action="Index">Facturas</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Estanteria" asp-action="Index">Estanteria</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="MetodoPago" asp-action="Index">MetodoPagos</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+
+                             @if (u?.Rol == "Admin")
+                            {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Producto" asp-action="Create"><b>Añadir producto</b></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Pedido" asp-action="Index"><b>Gestionar pedidos</b></a>
+        </li>
+                            }
                         </ul>
                     </div>
                 </nav>

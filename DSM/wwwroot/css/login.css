@@ -1,0 +1,54 @@
+/* Centrado total + fondo con look premium */
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: radial-gradient(900px 600px at 15% 15%, var(--color-primary-soft), transparent 55%), radial-gradient(900px 600px at 85% 85%, rgba(217, 137, 91, 0.18), transparent 55%), var(--color-bg);
+}
+
+/* Aprovecha tu .form-card, pero ajusta el tamaño */
+.login-card {
+    width: min(420px, 92vw);
+    border-radius: 20px;
+    padding: 22px;
+}
+
+.login-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+    .login-brand .logo {
+        height: 34px;
+    }
+
+.login-title {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+}
+
+.login-subtitle {
+    margin: 6px 0 14px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+/* Inputs un pelín más “premium” */
+.login-card .form-input {
+    background: #fff;
+    border-color: rgba(0,0,0,0.10);
+}
+
+    .login-card .form-input:focus {
+        border-color: rgba(217, 137, 91, 0.55);
+        box-shadow: 0 0 0 4px rgba(217, 137, 91, 0.18);
+    }
+
+/* Botón principal un poco más grande */
+.login-card .primary-btn {
+    padding: 11px 26px;
+}

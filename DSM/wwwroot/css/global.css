@@ -136,7 +136,18 @@ html, body {
 
 
 /* ---------- HERO ---------- */
+.navbar-admin {
+    background-color: var(--color-primary-soft);
+    border-radius: 14px; /* bordes redondeados */
+}
 
+    /* texto negro solo para el nav admin */
+    .navbar-admin .nav-link,
+    .navbar-admin .navbar-brand {
+        color: #000 !important;
+    }
+
+        }
 /* --- HERO ESTÁTICO --- */
 
 .hero {
@@ -1110,6 +1121,88 @@ html, body {
     font-weight: 600;
     text-align: right;
 }
+
+/* --------------------------------------------- */
+/* ----------- BUSCADOR + FILTRO CATEG ---------- */
+/* --------------------------------------------- */
+
+.product-search-wrap {
+    background: var(--color-card);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* El form en fila */
+.product-search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+    /* Tamaños “bonitos” */
+    .product-search-form .product-search-input {
+        min-width: 260px;
+        flex: 1;
+    }
+
+    .product-search-form .product-search-select {
+        min-width: 220px;
+    }
+
+    /* Botón buscar un poco más compacto para que no ocupe tanto */
+    .product-search-form .btn {
+        padding: 9px 18px;
+        font-size: 0.9rem;
+    }
+
+        /* Botón limpiar tipo ghost */
+        .product-search-form .btn.search-clear {
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+        }
+
+            .product-search-form .btn.search-clear:hover {
+                background-color: rgba(217, 137, 91, 0.08);
+            }
+
+/* Chips para mostrar filtros activos (opcional) */
+.search-chips {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.search-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .product-search-form .product-search-select {
+        min-width: 180px;
+        flex: 1;
+    }
+}
+
 
 @media (max-width: 600px) {
     .form-card,

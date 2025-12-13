@@ -47,6 +47,10 @@ namespace DSM.Models
 
         public string Direccion { get; set; }
 
-        
+        public string Rol { get; set; } = "Usuario";
+        public string? IdAdmin { get; set; }         // opcional por si lo necesitas
+
+
+
     }
 }

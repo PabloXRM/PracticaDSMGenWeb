@@ -1,14 +1,15 @@
-﻿using DSM.Models;
+﻿using DSM.Assemblers;
+using DSM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
 using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM;
 using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DSM.Controllers
 {
@@ -21,12 +22,54 @@ namespace DSM.Controllers
             _logger = logger;
         }
 
+        // Portada (sin resultados)
         public IActionResult Index()
         {
-            ProductoRepository productoRepo = new ProductoRepository();
-            ProductoCEN productoCEN = new ProductoCEN(productoRepo);
-            IList<ProductoEN> listaProdu = productoCEN.ReadAll(0, -1);
-            return View(listaProdu);
+            // Solo devuelve el modelo con filtros vacíos
+            return View(new HomeIndexViewModel());
+        }
+
+        // Página nueva: resultados del buscador
+        public IActionResult Resultados(string? q, EstiloEnum? estilo, FormatoEnum? formato)
+        {
+            var vm = GetProductosFiltrados(q, estilo, formato);
+            return View(vm); // Views/Home/Resultados.cshtml
+        }
+
+        // ---- Lógica común de filtrado ----
+        private HomeIndexViewModel GetProductosFiltrados(string? q, EstiloEnum? estilo, FormatoEnum? formato)
+        {
+            var productoCEN = new ProductoCEN(new ProductoRepository());
+
+            // OJO: usa un número grande (en muchos CEN, -1 no devuelve todo)
+            IList<ProductoEN> productosEN = productoCEN.ReadAll(0, 999999);
+
+            var productosVM = new List<ProductoViewModel>();
+            foreach (var p in productosEN)
+                productosVM.Add(new ProductoAssembler().ConvertENToModelUI(p));
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var term = q.Trim().ToLowerInvariant();
+                productosVM = productosVM.Where(p =>
+                       (p.Descripcion ?? "").ToLowerInvariant().Contains(term)
+                    || (p.Artista ?? "").ToLowerInvariant().Contains(term)
+                ).ToList();
+            }
+
+            if (estilo.HasValue)
+                productosVM = productosVM.Where(p => p.Estilo == estilo.Value).ToList();
+
+            if (formato.HasValue)
+                productosVM = productosVM.Where(p => p.Formato == formato.Value).ToList();
+
+            return new HomeIndexViewModel
+            {
+                Q = q,
+                Estilo = estilo,
+                Formato = formato,
+                Productos = productosVM
+            };
         }
 
         public IActionResult Privacy()

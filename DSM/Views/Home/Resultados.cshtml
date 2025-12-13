@@ -1,0 +1,34 @@
+﻿@model DSM.Models.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Resultados";
+}
+
+<section class="section">
+    <div class="section-header section-header-row">
+        <h2>Resultados</h2>
+        <a class="btn ghost-btn" asp-controller="Home" asp-action="Index">Volver</a>
+    </div>
+
+    @if (Model.Productos != null && Model.Productos.Count > 0)
+    {
+        <div class="cards-row">
+            @foreach (var p in Model.Productos)
+            {
+                <article class="disc-card">
+                    <img src="@(string.IsNullOrEmpty(p.Fotos) ? Url.Content("~/img/cd1.png") : p.Fotos)" alt="Producto" />
+                    <div style="padding:10px;">
+                        <div><b>@p.Artista</b></div>
+                        <div>@p.Descripcion</div>
+                        <div style="opacity:.7; font-size:.9rem;">
+                            @p.Estilo · @p.Formato
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <p style="opacity:.7;">No hay productos para esos filtros.</p>
+    }
+</section>

@@ -32,7 +32,7 @@ namespace DSM.Controllers
             UsuarioRepository usuRepo = new UsuarioRepository();
             UsuarioCEN usuCEN = new UsuarioCEN(usuRepo);
 
-            if(usuCEN.Login(login.DNI, login.Password) == null)
+            if (usuCEN.Login(login.DNI, login.Password) == null)
             {
                 ModelState.AddModelError("", "DNI o contraseña incorrectos");
                 return View();
@@ -40,14 +40,38 @@ namespace DSM.Controllers
             else
             {
                 SessionInitialize();
+
+                // 1) Cargar usuario normal
                 UsuarioEN usuEN = usuCEN.ReadOID(login.DNI);
                 UsuarioViewModel usuVM = new UsuarioAssembler().ConvertirENToViewModel(usuEN);
+
+                // 2) Detectar si también es Admin (mismo OID: email/DNI)
+                try
+                {
+                    AdminRepository adminRepo = new AdminRepository();
+                    AdminCEN adminCEN = new AdminCEN(adminRepo);
+
+                    AdminEN adminEN = adminCEN.ReadOID(login.DNI);
+
+                    if (adminEN != null && !string.IsNullOrEmpty(adminEN.IdAdmin))
+                    {
+                        usuVM.Rol = "Admin";
+                        usuVM.IdAdmin = adminEN.IdAdmin;
+                    }
+                }
+                catch
+                {
+                    // Si no existe como Admin o falla, se queda como Usuario
+                }
+
+                // 3) Guardar en sesión
                 HttpContext.Session.Set<UsuarioViewModel>("usuario", usuVM);
+
                 SessionClose();
                 return RedirectToAction("Index", "Home");
             }
-
         }
+
 
         // GET: UsuarioController
         public ActionResult Index()
