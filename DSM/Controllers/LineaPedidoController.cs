@@ -23,20 +23,28 @@ namespace DSM.Controllers
             LineaPedidoRepository lpRepo = new LineaPedidoRepository(session);
             LineaPedidoCEN lpCEN = new LineaPedidoCEN(lpRepo);
 
+            IList<LineaPedidoEN> listEN = lpCEN.ReadAll(0, -1);
 
+            IEnumerable<LineaPedidoViewModel> list =
                 new LineaPedidoAssembler().ConvertListENToViewModel(listEN).ToList();
 
             SessionClose();
 
+            return View(list);
         }
 
         // GET: LineaPedidoController/Details/5
         public ActionResult Details(int id)
         {
             SessionInitialize();
+            LineaPedidoRepository lpRepo = new LineaPedidoRepository(session);
+            LineaPedidoCEN lpCEN = new LineaPedidoCEN(lpRepo);
 
+            LineaPedidoEN en = lpCEN.ReadOID(id);
+            LineaPedidoViewModel vm = new LineaPedidoAssembler().ConvertENToModelUI(en);
 
             SessionClose();
+            return View(vm);
         }
 
         // GET: LineaPedidoController/Create
@@ -57,18 +65,26 @@ namespace DSM.Controllers
         // POST: LineaPedidoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Create(LineaPedidoViewModel lp)
         {
             if (!ModelState.IsValid)
             {
+                return View(lp);
             }
 
             try
             {
+                LineaPedidoRepository lpRepo = new LineaPedidoRepository();
+                LineaPedidoCEN lpCEN = new LineaPedidoCEN(lpRepo);
 
+                // TODO: call lpCEN.New_(...) with appropriate parameters
 
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(lp);
             }
         }
 
@@ -76,26 +92,39 @@ namespace DSM.Controllers
         public ActionResult Edit(int id)
         {
             SessionInitialize();
+            LineaPedidoRepository lpRepo = new LineaPedidoRepository(session);
+            LineaPedidoCEN lpCEN = new LineaPedidoCEN(lpRepo);
 
+            LineaPedidoEN en = lpCEN.ReadOID(id);
+            LineaPedidoViewModel vm = new LineaPedidoAssembler().ConvertENToModelUI(en);
 
             SessionClose();
+            return View(vm);
         }
 
         // POST: LineaPedidoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Edit(LineaPedidoViewModel lp)
         {
             if (!ModelState.IsValid)
             {
+                return View(lp);
             }
 
             try
             {
+                LineaPedidoRepository lpRepo = new LineaPedidoRepository();
+                LineaPedidoCEN lpCEN = new LineaPedidoCEN(lpRepo);
 
+                // TODO: call lpCEN.Modify(...) with appropriate parameters
 
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(lp);
             }
         }
 

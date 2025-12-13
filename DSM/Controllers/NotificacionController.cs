@@ -23,20 +23,27 @@ namespace DSM.Controllers
             NotificacionRepository notiRepo = new NotificacionRepository(session);
             NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
+            IList<NotificacionEN> listEN = notiCEN.ReadAll(0, -1);
 
+            IEnumerable<NotificacionViewModel> list =
+                new NotificacionAssembler().ConvertListENToViewModel(listEN).ToList();
 
             SessionClose();
 
+            return View(list);
         }
 
         // GET: NotificacionController/Details/5
         public ActionResult Details(int id)
         {
             SessionInitialize();
+            NotificacionRepository notiRepo = new NotificacionRepository(session);
+            NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-
+            NotificacionEN en = notiCEN.ReadOID(id);
             NotificacionViewModel vm = new NotificacionAssembler().ConvertENToModelUI(en);
             SessionClose();
+            return View(vm);
         }
 
         // GET: NotificacionController/Create
@@ -63,18 +70,29 @@ namespace DSM.Controllers
         // POST: NotificacionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Create(NotificacionViewModel noti)
         {
+            if (!ModelState.IsValid)
             {
+                CargarTipos();
+                return View(noti);
             }
 
             SessionInitialize();
             try
             {
+                NotificacionRepository notiRepo = new NotificacionRepository();
+                NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
+                // TODO: call notiCEN.New_(...) with appropriate parameters
 
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                CargarTipos();
+                return View(noti);
             }
         }
 
@@ -82,27 +100,42 @@ namespace DSM.Controllers
         public ActionResult Edit(int id)
         {
             SessionInitialize();
+            NotificacionRepository notiRepo = new NotificacionRepository(session);
+            NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
-
+            NotificacionEN en = notiCEN.ReadOID(id);
             NotificacionViewModel vm = new NotificacionAssembler().ConvertENToModelUI(en);
             SessionClose();
+            CargarTipos();
+            return View(vm);
         }
 
         // POST: NotificacionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Edit(NotificacionViewModel noti)
         {
+            if (!ModelState.IsValid)
             {
+                CargarTipos();
+                return View(noti);
             }
 
             SessionInitialize();
             try
             {
+                NotificacionRepository notiRepo = new NotificacionRepository();
+                NotificacionCEN notiCEN = new NotificacionCEN(notiRepo);
 
+                // TODO: call notiCEN.Modify(...) with appropriate parameters
 
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                CargarTipos();
+                return View(noti);
             }
         }
 

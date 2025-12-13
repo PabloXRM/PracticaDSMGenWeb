@@ -7,41 +7,45 @@
     <title>@ViewData["Title"] - DSM</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/global.css" />
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DSM</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Factura" asp-action="Index">Facturas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Estanteria" asp-action="Index">Estanteria</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MetodoPago" asp-action="Index">MetodoPagos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <header class="site-header">
+        <div class="topbar topbar-news">
+            <div class="topbar-inner topbar-inner--thin">
+                <div class="news-nav">
+                    <span class="news-pill">NOVEDADES</span>
+                    <span class="news-text">Lo último en vinilos - Envío 24h - 50% en productos seleccionados</span>
                 </div>
             </div>
-        </nav>
+        </div>
+
+        <div class="topbar topbar-main">
+            <div class="topbar-inner">
+                <a class="logo-link" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/logo.png" alt="DSM" class="logo" onerror="this.style.display='none';document.getElementById('logo-text').style.display='inline-block';" />
+                    <span id="logo-text" style="display:none;font-weight:700;font-size:1.1rem;color:var(--color-primary);">DSM</span>
+                </a>
+
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="main-menu navbar-nav flex-grow-1">
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Factura" asp-action="Index">Facturas</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Estanteria" asp-action="Index">Estanteria</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="MetodoPago" asp-action="Index">MetodoPagos</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
     </header>
 
     <div class="page-wrapper">

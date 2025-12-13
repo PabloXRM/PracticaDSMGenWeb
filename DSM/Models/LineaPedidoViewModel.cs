@@ -13,6 +13,10 @@ namespace DSM.Models
         public int Cantidad { get; set; }
 
         [Required(ErrorMessage = "Debe indicar un precio")]
-        [DataType(DataType.Currency, ErrorMessage = "El precio debe ser v�lido")]
+        [DataType(DataType.Currency, ErrorMessage = "El precio debe ser válido")]
+        public double Precio { get; set; }
+
+        [ScaffoldColumn(false)]
+        public int IdPedido { get; set; }
     }
 }
