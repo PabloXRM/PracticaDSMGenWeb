@@ -1,0 +1,65 @@
+﻿@model DSM.Models.UsuarioViewModel
+@{
+    ViewData["Title"] = "Mi perfil";
+}
+<div class="profile-page">
+    <div class="profile-card">
+
+        <div class="profile-header">
+            <div>
+                <h1 class="profile-title">Mi perfil</h1>
+                <p class="profile-subtitle">Consulta y edita tus datos personales.</p>
+            </div>
+
+            <div class="profile-badges">
+                <span class="profile-badge primary">@Model.Rol</span>
+                @if (Model.Rol == "Admin" && !string.IsNullOrEmpty(Model.IdAdmin))
+                {
+                    <span class="profile-badge">ID Admin: @Model.IdAdmin</span>
+                }
+            </div>
+        </div>
+
+        <div class="profile-divider"></div>
+
+        <div class="profile-grid">
+            <div class="profile-field">
+                <div class="profile-label">Email</div>
+                <div class="profile-value">@Model.email</div>
+            </div>
+
+            <div class="profile-field">
+                <div class="profile-label">Nombre</div>
+                <div class="profile-value">@Model.Nombre</div>
+            </div>
+
+            <div class="profile-field">
+                <div class="profile-label">Dirección</div>
+                <div class="profile-value">@Model.Direccion</div>
+            </div>
+
+            <div class="profile-field">
+                <div class="profile-label">Código Postal</div>
+                <div class="profile-value">@Model.CodPostal</div>
+            </div>
+
+            <div class="profile-field">
+                <div class="profile-label">Fecha de nacimiento</div>
+                <div class="profile-value">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            <div class="profile-field">
+                <div class="profile-label">Rol</div>
+                <div class="profile-value">@Model.Rol</div>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <a class="btn primary-btn" asp-controller="Usuario" asp-action="EditPerfil">Editar perfil</a>
+            <a class="btn ghost-btn" asp-controller="Home" asp-action="Index">Volver</a>
+            <a class="btn danger-btn" asp-controller="Usuario" asp-action="CambiarPassword">Cambiar contraseña</a>
+            <a class="logout-link" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a>
+        </div>
+
+    </div>
+</div>

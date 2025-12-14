@@ -88,9 +88,33 @@ public System.Collections.Generic.IList<UsuarioEN> ReadAllDefault (int first, in
         return result;
 }
 
-// Modify default (Update all attributes of the class)
+        // Modify default (Update all attributes of the class)
 
-public void ModifyDefault (UsuarioEN usuario)
+        public void ChangePassword(string p_Usuario_OID, string p_newPassHashed)
+        {
+            try
+            {
+                SessionInitializeTransaction();
+
+                UsuarioEN usuarioEN = (UsuarioEN)session.Load(typeof(UsuarioEN), p_Usuario_OID);
+                usuarioEN.Pass = p_newPassHashed;
+
+                session.Update(usuarioEN);
+                SessionCommit();
+            }
+            catch (Exception ex)
+            {
+                SessionRollBack();
+                throw;
+            }
+            finally
+            {
+                SessionClose();
+            }
+        }
+
+
+        public void ModifyDefault (UsuarioEN usuario)
 {
         try
         {

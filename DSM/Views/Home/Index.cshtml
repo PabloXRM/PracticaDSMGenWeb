@@ -4,6 +4,37 @@
 @model DSM.Models.HomeIndexViewModel
 @using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM
 
+<div class="product-search-wrap" style="margin-bottom:16px;">
+    <form class="product-search-form" method="get" asp-controller="Home" asp-action="Resultados">
+        <input class="form-input product-search-input"
+               name="q"
+               value="@Model.Q"
+               placeholder="Buscar por nombre, artista, descripción..." />
+
+        <select class="form-select product-search-select" name="estilo">
+            <option value="">Todos los estilos</option>
+            @foreach (EstiloEnum e in Enum.GetValues(typeof(EstiloEnum)))
+            {
+                <option value="@((int)e)" selected="@(Model.Estilo.HasValue && (int)Model.Estilo.Value == (int)e)">
+                    @e
+                </option>
+            }
+        </select>
+
+        <select class="form-select product-search-select" name="formato">
+            <option value="">Todos los formatos</option>
+            @foreach (FormatoEnum f in Enum.GetValues(typeof(FormatoEnum)))
+            {
+                <option value="@((int)f)" selected="@(Model.Formato.HasValue && (int)Model.Formato.Value == (int)f)">
+                    @f
+                </option>
+            }
+        </select>
+
+        <button class="btn primary-btn" type="submit">Buscar</button>
+        <a class="btn search-clear" asp-controller="Home" asp-action="Index">Limpiar</a>
+    </form>
+</div>
 
 <section class="hero">
     <div class="hero-static">
@@ -16,69 +47,9 @@
         <span class="dot"></span>
     </div>
 </section>
-
-<div class="product-search-wrap" style="margin-bottom:16px;">
-    <form class="product-search-form" method="get" asp-controller="Home" asp-action="Resultados">
-        <input class="form-input product-search-input"
-               name="q"
-               value="@Model.Q"
-               placeholder="Buscar por nombre, artista, descripción..." />
-
-        <select class="form-select product-search-select" name="estilo">
-            <option value="">Todos los estilos</option>
-            @foreach (EstiloEnum e in Enum.GetValues(typeof(EstiloEnum)))
-            {
-                    <option value="@((int)e)" selected="@(Model.Estilo.HasValue && (int)Model.Estilo.Value == (int)e)">
-                    @e
-                    </option>
-            }
-        </select>
-
-        <select class="form-select product-search-select" name="formato">
-            <option value="">Todos los formatos</option>
-            @foreach (FormatoEnum f in Enum.GetValues(typeof(FormatoEnum)))
-            {
-                    <option value="@((int)f)" selected="@(Model.Formato.HasValue && (int)Model.Formato.Value == (int)f)">
-                    @f
-                    </option>
-            }
-        </select>
-
-        <button class="btn primary-btn" type="submit">Buscar</button>
-        <a class="btn search-clear" asp-controller="Home" asp-action="Index">Limpiar</a>
-    </form>
-</div>
-
-<section class="section">
-    <div class="section-header section-header-row">
-        <h2>Resultados</h2>
-    </div>
-
-    @if (Model?.Productos != null && Model.Productos.Count > 0)
-    {
-            <div class="cards-row">
-            @foreach (var p in Model.Productos)
-            {
-                        <article class="disc-card">
-                            <img src="@(string.IsNullOrEmpty(p.Fotos) ? Url.Content("~/img/cd1.png") : p.Fotos)" alt="Producto" />
-                            <div style="padding:10px;">
-                                <div><b>@p.Artista</b></div>
-                                <div>@p.Descripcion</div>
-                                <div style="opacity:.7; font-size:.9rem;">
-                            @p.Estilo · @p.Formato
-                                </div>
-                            </div>
-                        </article>
-            }
-            </div>
-    }
-    else
-    {
-            <p style="opacity:.7;">No hay productos para esos filtros.</p>
-    }
-</section>
-
-
+<br>
+<br>
+<hr>
 
 <section class="section section-reserve">
     <div class="section-header">

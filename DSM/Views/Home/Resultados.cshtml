@@ -14,17 +14,25 @@
         <div class="cards-row">
             @foreach (var p in Model.Productos)
             {
-                <article class="disc-card">
-                    <img src="@(string.IsNullOrEmpty(p.Fotos) ? Url.Content("~/img/cd1.png") : p.Fotos)" alt="Producto" />
-                    <div style="padding:10px;">
-                        <div><b>@p.Artista</b></div>
-                        <div>@p.Descripcion</div>
-                        <div style="opacity:.7; font-size:.9rem;">
-                            @p.Estilo · @p.Formato
+                <a asp-controller="Producto"
+                   asp-action="Details"
+                   asp-route-id="@p.Id"
+                   class="disc-card-link">
+
+                    <article class="disc-card">
+                        <img src="@(string.IsNullOrEmpty(p.Fotos) ? Url.Content("~/img/cd1.png") : p.Fotos)" alt="Producto" />
+
+                        <div style="padding:10px;">
+                            <div><b>@p.Artista</b></div>
+                            <div>@p.Descripcion</div>
+                            <div style="opacity:.7; font-size:.9rem;">
+                                @p.Estilo · @p.Formato
+                            </div>
                         </div>
-                    </div>
-                </article>
+                    </article>
+                </a>
             }
+
         </div>
     }
     else

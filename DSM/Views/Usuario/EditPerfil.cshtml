@@ -1,0 +1,53 @@
+﻿@model DSM.Models.EditPerfilViewModel
+@{
+    ViewData["Title"] = "Editar perfil";
+}
+
+<div class="form-page">
+    <div class="form-card">
+        <h1 class="form-title">Editar perfil</h1>
+        <p class="form-subtitle">Actualiza tus datos. Para guardar, introduce tu contraseña.</p>
+
+        <form asp-action="EditPerfil" method="post" class="form-layout">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="form-error"></div>
+
+            <div class="form-field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-input" readonly />
+                <span asp-validation-for="Email" class="form-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Nombre"></label>
+                <input asp-for="Nombre" class="form-input" />
+                <span asp-validation-for="Nombre" class="form-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Direccion"></label>
+                <input asp-for="Direccion" class="form-input" />
+                <span asp-validation-for="Direccion" class="form-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="FechaNacimiento"></label>
+                <input asp-for="FechaNacimiento" class="form-input" />
+                <span asp-validation-for="FechaNacimiento" class="form-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="CodPostal"></label>
+                <input asp-for="CodPostal" class="form-input" />
+                <span asp-validation-for="CodPostal" class="form-error"></span>
+            </div>
+
+            <button class="btn primary-btn" type="submit">Guardar cambios</button>
+            <a class="btn ghost-btn" asp-controller="Usuario" asp-action="Perfil">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

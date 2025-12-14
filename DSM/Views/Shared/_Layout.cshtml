@@ -41,12 +41,18 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="main-menu navbar-nav flex-grow-1">
 
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Página principal</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a></li>
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Factura" asp-action="Index">Facturas</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Estanteria" asp-action="Index">Estanteria</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="MetodoPago" asp-action="Index">MetodoPagos</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Estanteria" asp-action="Index">Estantería</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a></li>
+                            @if (u != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Usuario" asp-action="Perfil">Perfil</a>
+                                </li>
+                            }
 
                              @if (u?.Rol == "Admin")
                             {
@@ -57,6 +63,8 @@
             <a class="nav-link" asp-controller="Pedido" asp-action="Index"><b>Gestionar pedidos</b></a>
         </li>
                             }
+
+
                         </ul>
                     </div>
                 </nav>

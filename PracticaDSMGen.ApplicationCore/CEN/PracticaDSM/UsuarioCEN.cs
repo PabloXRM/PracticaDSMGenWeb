@@ -116,9 +116,15 @@ public System.Collections.Generic.IList<PracticaDSMGen.ApplicationCore.EN.Practi
         return _IUsuarioRepository.DamePorReseña (p_idReseña);
 }
 
+public void ChangePassword(string p_Usuario_OID, string p_newPass)
+        {
+            // hash igual que en New_
+            string hashed = Utils.Util.GetEncondeMD5(p_newPass);
+            _IUsuarioRepository.ChangePassword(p_Usuario_OID, hashed);
+        }
 
 
-private string Encode (string email)
+        private string Encode (string email)
 {
         var payload = new Dictionary<string, object>(){
                 { "email", email }

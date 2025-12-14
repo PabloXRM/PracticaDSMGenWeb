@@ -12,7 +12,10 @@ void setSessionCP (GenericSessionCP session);
 UsuarioEN ReadOIDDefault (string email
                           );
 
-void ModifyDefault (UsuarioEN usuario);
+        void ChangePassword(string p_Usuario_OID, string p_newPassHashed);
+
+
+        void ModifyDefault (UsuarioEN usuario);
 
 System.Collections.Generic.IList<UsuarioEN> ReadAllDefault (int first, int size);
 
