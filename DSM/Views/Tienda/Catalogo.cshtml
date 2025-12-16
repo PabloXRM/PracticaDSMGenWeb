@@ -5,36 +5,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="section section-shop-hero">
-    <div class="section-inner">
-        <header class="section-header">
-            <span class="section-kicker">Tienda</span>
-            <h2>Catálogo</h2>
-        </header>
-    </div>
-</section>
-
-<section class="section section-shop-list">
-    <div class="section-inner">
-        <div class="shop-grid">
-            @foreach (var p in Model)
-            {
-                <article class="shop-card">
-                    <a asp-controller="Tienda" asp-action="Producto" asp-route-id="@p.Id" class="shop-card-link">
-                        <div class="shop-img">
-                            <img src="@p.Fotos" alt="@p.Descripcion" onerror="this.style.display='none';" />
-                        </div>
-
-                        <div class="shop-info">
-                            <h3 class="shop-title">@p.Descripcion</h3>
-                            <div class="shop-meta">
-                                <span class="shop-price">@String.Format("{0:0.00} €", p.Precio)</span>
-                                <span class="shop-stock">@((p.Stock > 0) ? "En stock" : "Agotado")</span>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            }
+<section class="section">
+    <div class="section-header section-header-row">
+        <div>
+            <div class="section-kicker">Tienda</div>
+            <h2>CATÁLOGO</h2>
         </div>
+    </div>
+
+    <div class="shop-grid">
+        @foreach (var p in Model)
+        {
+            <article class="shop-card">
+                <a class="shop-card-link" asp-controller="Tienda" asp-action="Producto" asp-route-id="@p.Id">
+                    <div class="shop-img">
+
+                        @{
+                            var foto = string.IsNullOrWhiteSpace(p.Fotos)
+                            ? Url.Content("~/img/cd1.png")
+                            : Url.Content("~/" + p.Fotos.TrimStart('/'));
+                        }
+
+                        <img src="@foto" alt="@p.Descripcion" />
+
+                    </div>
+
+                    <div class="shop-info">
+                        <h3 class="shop-title">@p.Descripcion</h3>
+
+                        <div class="shop-meta">
+                            <span class="shop-price">@String.Format("{0:0.00} €", p.Precio)</span>
+                            <span class="shop-stockpill">STOCK: @p.Stock</span>
+                        </div>
+
+                        <div class="shop-actions">
+                            <span class="btn ghost-btn btn-sm">Ver detalles</span>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        }
     </div>
 </section>

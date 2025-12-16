@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - TempoShop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DSM</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/global.css" />
@@ -21,50 +21,72 @@
             <div class="topbar-inner topbar-inner--thin">
                 <div class="news-nav">
                     <span class="news-pill">NOVEDADES</span>
-                    <span class="news-text">Lo último en vinilos - Envío 24h - 50% en productos seleccionados</span>
+                    <span class="news-text">Lo último en vinilos · Envío 24h</span>
                 </div>
             </div>
         </div>
 
         <div class="topbar topbar-main">
             <div class="topbar-inner">
-                <a class="logo-link" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/img/logo.png" alt="DSM" class="logo" onerror="this.style.display='none';document.getElementById('logo-text').style.display='inline-block';" />
-                    <span id="logo-text" style="display:none;font-weight:700;font-size:1.1rem;color:var(--color-primary);">DSM</span>
+                <a class="logo-link" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/logo.png" alt="DSM" class="logo" />
                 </a>
 
-                <nav class="navbar navbar-expand-sm navbar-toggleable-sm @(u?.Rol == "Admin" ? "navbar-admin" : "navbar-light bg-white")">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                <nav class="navbar navbar-expand-sm navbar-light bg-white">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="main-menu navbar-nav flex-grow-1">
 
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Página principal</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Factura" asp-action="Index">Facturas</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Estanteria" asp-action="Index">Estantería</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+                            </li>
+
+                            @* ---------- MENÚ ADMIN ---------- *@
+                            @if (u?.Rol == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Producto" asp-action="Index">Productos (Admin)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Factura" asp-action="Index">Facturas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Estanteria" asp-action="Index">Estanterías</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Pedido" asp-action="Index"><b>Pedidos</b></a>
+                                </li>
+                            }
+                            else
+                            {
+                                @* ---------- MENÚ USUARIO ---------- *@
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Tienda" asp-action="Catalogo">Productos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Carrito" asp-action="Index">Carrito</a>
+                                </li>
+                            }
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+                            </li>
+
                             @if (u != null)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Usuario" asp-action="Perfil">Perfil</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Usuario" asp-action="Logout">Salir</a>
+                                </li>
                             }
-
-                             @if (u?.Rol == "Admin")
-                            {
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Producto" asp-action="Create"><b>Añadir producto</b></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Pedido" asp-action="Index"><b>Gestionar pedidos</b></a>
-        </li>
-                            }
-
-
                         </ul>
                     </div>
                 </nav>
@@ -79,24 +101,10 @@
     </div>
 
     <footer class="site-footer">
-        <div class="footer-top">
-            <label class="region-label" for="region-select">País / Región</label>
-            <select id="region-select" class="region-select">
-                <option>España (ES)</option>
-                <option>Portugal (PT)</option>
-                <option>Francia (FR)</option>
-                <option>Alemania (AL)</option>
-                <option>China (CH)</option>
-                <option>Reino Unido (UK)</option>
-            </select>
-        </div>
-
         <div class="footer-links">
-            <a href="#">Política de privacidad</a>
             <a href="#">Aviso legal</a>
-            <a href="#">Condiciones generales de venta y compra</a>
+            <a href="#">Privacidad</a>
             <a href="#">Contacto</a>
-            <a href="#">Política de cookies</a>
         </div>
     </footer>
 
