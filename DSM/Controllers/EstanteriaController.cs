@@ -9,11 +9,13 @@ using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DSM.Filters;
 
 namespace DSM.Controllers
 {
     public class EstanteriaController : BasicController
     {
+        [AdminOnly]
         // GET: EstanteriaController
         public ActionResult Index()
         {

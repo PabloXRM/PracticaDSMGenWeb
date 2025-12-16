@@ -13,12 +13,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using DSM.Filters;
 
 namespace DSM.Controllers
 {
+    [AdminOnly]
     public class ProductoController : BasicController
     { 
-    private readonly IWebHostEnvironment _webHost;
+        private readonly IWebHostEnvironment _webHost;
 
         public ProductoController(IWebHostEnvironment webHost)
         {

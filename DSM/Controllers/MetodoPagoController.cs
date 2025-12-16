@@ -9,9 +9,11 @@ using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DSM.Filters;
 
 namespace DSM.Controllers
 {
+    [AdminOnly]
     public class MetodoPagoController : BasicController
     {
         // GET: MetodoPagoController

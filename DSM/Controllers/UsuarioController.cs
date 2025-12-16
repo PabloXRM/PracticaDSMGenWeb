@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
+
 namespace DSM.Controllers
 {
     public class UsuarioController : BasicController
@@ -45,24 +46,36 @@ namespace DSM.Controllers
                 UsuarioEN usuEN = usuCEN.ReadOID(login.DNI);
                 UsuarioViewModel usuVM = new UsuarioAssembler().ConvertirENToViewModel(usuEN);
 
-                // 2) Detectar si también es Admin (mismo OID: email/DNI)
+                // Rol por defecto SIEMPRE
+                usuVM.Rol = "Usuario";
+                usuVM.IdAdmin = null;
+
+                //  Admin “fijo” por email (para tu caso)
+                if (login.DNI.Trim().ToLower() == "prueba@gmail.com")
+                {
+                    usuVM.Rol = "Admin";
+                }
+
+                // 2) Detectar si también es Admin (por tabla Admin)
                 try
                 {
-                    AdminRepository adminRepo = new AdminRepository();
+                    //  usar la misma session
+                    AdminRepository adminRepo = new AdminRepository(session);
                     AdminCEN adminCEN = new AdminCEN(adminRepo);
 
                     AdminEN adminEN = adminCEN.ReadOID(login.DNI);
 
-                    if (adminEN != null && !string.IsNullOrEmpty(adminEN.IdAdmin))
+                    //  NO dependemis de IdAdmin (puede venir vacío)
+                    if (adminEN != null)
                     {
                         usuVM.Rol = "Admin";
-                        usuVM.IdAdmin = adminEN.IdAdmin;
+                        usuVM.IdAdmin = adminEN.IdAdmin; // si viene null no pasa nada
                     }
                 }
-                catch
-                {
-                    // Si no existe como Admin o falla, se queda como Usuario
-                }
+                catch { }
+
+                // 2.5) Guardar flag rápido para filtros/menú
+                HttpContext.Session.SetString("IsAdmin", (usuVM.Rol == "Admin") ? "true" : "false");
 
                 // 3) Guardar en sesión
                 HttpContext.Session.Set<UsuarioViewModel>("usuario", usuVM);
@@ -115,6 +128,7 @@ namespace DSM.Controllers
                 usuVM.Rol = "Usuario";
                 usuVM.IdAdmin = null;
 
+                HttpContext.Session.SetString("IsAdmin", "false");
                 HttpContext.Session.Set<UsuarioViewModel>("usuario", usuVM);
 
                 SessionClose();
