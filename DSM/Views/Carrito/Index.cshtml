@@ -1,0 +1,58 @@
+﻿@model List<DSM.Controllers.CarritoItemViewModel>
+
+@{
+    ViewData["Title"] = "Carrito";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section">
+    <div class="section-inner">
+        <header class="section-header section-header-row">
+            <h2>Carrito</h2>
+            <form asp-action="Clear" method="post">
+                <button class="btn ghost-btn btn-sm" type="submit">Vaciar</button>
+            </form>
+        </header>
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <p>Tu carrito está vacío.</p>
+            <a class="btn primary-btn" asp-controller="Tienda" asp-action="Catalogo">Ir al catálogo</a>
+        }
+        else
+        {
+            <div class="cart-list">
+                @{
+                    double total = 0;
+                }
+                @foreach (var it in Model)
+                {
+                    var subtotal = it.Producto.Precio * it.Cantidad;
+                    total += subtotal;
+
+                    <article class="cart-row">
+                        <div>
+                            <div class="cart-title">@it.Producto.Descripcion</div>
+                            <div class="cart-muted">
+                                @String.Format("{0:0.00} €", it.Producto.Precio) · Cantidad: @it.Cantidad
+                            </div>
+                        </div>
+
+                        <div class="cart-right">
+                            <div class="cart-total">@String.Format("{0:0.00} €", subtotal)</div>
+                            <form asp-action="Remove" method="post">
+                                <input type="hidden" name="id" value="@it.Producto.Id" />
+                                <button class="btn ghost-btn btn-sm" type="submit">Quitar</button>
+                            </form>
+                        </div>
+                    </article>
+                }
+
+                <div class="cart-summary">
+                    <span>Total</span>
+                    <strong>@String.Format("{0:0.00} €", total)</strong>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,39 @@
+﻿@model DSM.Models.ProductoViewModel
+
+@{
+    ViewData["Title"] = "Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section section-product-page">
+    <div class="section-inner">
+        <div class="product-card">
+            <div class="product-media">
+                <img src="@Model.Fotos" alt="@Model.Descripcion" onerror="this.style.display='none';" />
+            </div>
+
+            <div class="product-content">
+                <span class="section-kicker">Producto</span>
+                <h2 class="product-title">@Model.Descripcion</h2>
+
+                <div class="product-badges">
+                    <span class="badge">@Model.Formato</span>
+                    <span class="badge">@Model.Estilo</span>
+                </div>
+
+                <div class="product-price-row">
+                    <span class="product-price">@String.Format("{0:0.00} €", Model.Precio)</span>
+                    <span class="product-stock">@((Model.Stock > 0) ? "En stock" : "Agotado")</span>
+                </div>
+
+                <form asp-controller="Carrito" asp-action="Add" method="post" class="product-actions">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button class="btn primary-btn" type="submit" @(Model.Stock <= 0 ? "disabled" : "")>
+                        Añadir a la cesta
+                    </button>
+                    <a asp-controller="Tienda" asp-action="Catalogo" class="btn ghost-btn">Volver</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
