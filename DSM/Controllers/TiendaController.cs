@@ -1,18 +1,17 @@
 ﻿using DSM.Assemblers;
 using DSM.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
-using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
+using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
 using System.Collections.Generic;
 using System.Linq;
 
-//LO MISMO QUE EL PRODUCTO CONTROLLER PERO SIN RESTRICCION DE ADMIN
 namespace DSM.Controllers
 {
     public class TiendaController : BasicController
     {
-        // GET: /Tienda/Catalogo
         public ActionResult Catalogo()
         {
             SessionInitialize();
@@ -24,26 +23,49 @@ namespace DSM.Controllers
             var listVM = new ProductoAssembler().ConvertListENToViewModel(listEN).ToList();
 
             SessionClose();
-
             return View(listVM);
         }
 
-        // GET: /Tienda/Producto/5
         public ActionResult Producto(int id)
         {
+            var u = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            bool isAdmin = HttpContext.Session.GetString("IsAdmin") == "true";
+
             SessionInitialize();
 
-            var repo = new ProductoRepository(session);
-            var cen = new ProductoCEN(repo);
+            var prodRepo = new ProductoRepository(session);
+            var prodCEN = new ProductoCEN(prodRepo);
+            var prodEN = prodCEN.ReadOID(id);
 
-            ProductoEN en = cen.ReadOID(id);
+            if (prodEN == null)
+            {
+                SessionClose();
+                return RedirectToAction("Catalogo");
+            }
+
+            var prodVM = new ProductoAssembler().ConvertENToModelUI(prodEN);
+
+            var resRepo = new PracticaDSMGen.Infraestructure.Repository.PracticaDSM.ReseñaRepository(session);
+            var resCEN = new ReseñaCEN(resRepo);
+
+            var resenasEN = resCEN.ReadAll(0, -1)
+                .Where(r => r.Producto != null && r.Producto.Id == id)
+                .ToList();
+
+            var resenasVM = new ResenaAssembler().ConvertListENToViewModel(resenasEN).ToList();
 
             SessionClose();
 
-            if (en == null) return NotFound();
+            var pageVM = new ProductoDetalleViewModel
+            {
+                Producto = prodVM,
+                Resenas = resenasVM,
+                UsuarioLogueado = (u != null),
+                EsAdmin = isAdmin,
+                PuedeResenar = (u != null && !isAdmin)
+            };
 
-            var vm = new ProductoAssembler().ConvertENToModelUI(en);
-            return View(vm);
+            return View(pageVM);
         }
     }
 }

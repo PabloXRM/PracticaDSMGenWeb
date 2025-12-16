@@ -1,40 +1,41 @@
 @model DSM.Models.ResenaViewModel
+
 @{
     ViewData["Title"] = "Eliminar reseña";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Eliminar Reseña</h1>
+<section class="section form-page">
+    <div class="detail-card">
+        <div class="form-header">
+            <h2>ELIMINAR RESEÑA</h2>
+            <p>Esta acción no se puede deshacer.</p>
+        </div>
 
-<h3>¿Seguro que desea eliminar esta reseña?</h3>
-<div>
-    <h4>Reseña</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Id</dt>
-        <dd class="col-sm-10">@Model.Id</dd>
+        <div class="detail-list">
+            <div class="detail-row">
+                <div class="detail-label">Producto</div>
+                <div class="detail-value">ID: @Model.ProductoId</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Usuario</div>
+                <div class="detail-value">@Model.UsuarioEmail</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Nota</div>
+                <div class="detail-value">@Model.Nota / 10</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha</div>
+                <div class="detail-value">@Model.Fecha.ToString("yyyy-MM-dd")</div>
+            </div>
+        </div>
 
-        <dt class="col-sm-2">Producto</dt>
-        <dd class="col-sm-10">@Model.ProductoId</dd>
-
-        <dt class="col-sm-2">Usuario</dt>
-        <dd class="col-sm-10">@Model.UsuarioEmail</dd>
-
-        <dt class="col-sm-2">Nota</dt>
-        <dd class="col-sm-10">@Model.Nota</dd>
-
-        <dt class="col-sm-2">Fecha</dt>
-        <dd class="col-sm-10">@Model.Fecha.ToString("yyyy-MM-dd")</dd>
-
-        <dt class="col-sm-2">Descripción</dt>
-        <dd class="col-sm-10">@Model.Descripcion</dd>
-    </dl>
-</div>
-
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group mt-2">
-        <input type="submit" value="Eliminar" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        <form asp-action="Delete" method="post" class="form-actions" style="margin-top:18px;">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <button class="btn danger-btn" type="submit">Eliminar</button>
+            <a class="btn ghost-btn" asp-action="Index">Cancelar</a>
+        </form>
     </div>
-</form>
+</section>

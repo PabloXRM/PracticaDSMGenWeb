@@ -1,39 +1,129 @@
-﻿@model DSM.Models.ProductoViewModel
+﻿@model DSM.Models.ProductoDetalleViewModel
+@using DSM.Models
 
 @{
     ViewData["Title"] = "Producto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var p = Model.Producto;
+
+    var foto = string.IsNullOrWhiteSpace(p?.Fotos)
+        ? Url.Content("~/img/cd1.png")
+        : Url.Content("~/" + p.Fotos.TrimStart('/'));
 }
 
 <section class="section section-product-page">
     <div class="section-inner">
+
         <div class="product-card">
             <div class="product-media">
-                <img src="@Model.Fotos" alt="@Model.Descripcion" onerror="this.style.display='none';" />
+                <img src="@foto" alt="@p?.Descripcion" onerror="this.src='@Url.Content("~/img/cd1.png")';" />
             </div>
 
             <div class="product-content">
                 <span class="section-kicker">Producto</span>
-                <h2 class="product-title">@Model.Descripcion</h2>
+                <h2 class="product-title">@p.Descripcion</h2>
 
                 <div class="product-badges">
-                    <span class="badge">@Model.Formato</span>
-                    <span class="badge">@Model.Estilo</span>
+                    <span class="badge">@p.Formato</span>
+                    <span class="badge">@p.Estilo</span>
                 </div>
 
                 <div class="product-price-row">
-                    <span class="product-price">@String.Format("{0:0.00} €", Model.Precio)</span>
-                    <span class="product-stock">@((Model.Stock > 0) ? "En stock" : "Agotado")</span>
+                    <span class="product-price">@String.Format("{0:0.00} €", p.Precio)</span>
+                    <span class="product-stock">@((p.Stock > 0) ? "En stock" : "Agotado")</span>
                 </div>
 
-                <form asp-controller="Carrito" asp-action="Add" method="post" class="product-actions">
-                    <input type="hidden" name="id" value="@Model.Id" />
-                    <button class="btn primary-btn" type="submit" @(Model.Stock <= 0 ? "disabled" : "")>
-                        Añadir a la cesta
-                    </button>
+                <div class="product-actions">
+                    <form asp-controller="Carrito" asp-action="Add" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@p.Id" />
+                        <button class="btn primary-btn" type="submit" @(p.Stock <= 0 ? "disabled" : "")>
+                            Añadir a la cesta
+                        </button>
+                    </form>
+
+                    <a asp-controller="Carrito" asp-action="Index" class="btn ghost-btn">Ver cesta</a>
                     <a asp-controller="Tienda" asp-action="Catalogo" class="btn ghost-btn">Volver</a>
-                </form>
+                </div>
+
+                <div class="profile-divider"></div>
+
+                <!-- RESEÑAS -->
+                <div class="section-header section-header-row" style="margin-bottom:10px;">
+                    <div>
+                        <div class="section-kicker">Opiniones</div>
+                        <h2 style="margin-top:6px;">RESEÑAS</h2>
+                    </div>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        @if (Model.UsuarioLogueado && !Model.EsAdmin)
+                        {
+                            <a class="btn primary-btn btn-sm"
+                               asp-controller="Resena"
+                               asp-action="Create"
+                               asp-route-productoId="@p.Id">
+                                Escribir reseña
+                            </a>
+                        }
+
+                        @if (Model.UsuarioLogueado && Model.EsAdmin)
+                        {
+                            <a class="btn ghost-btn btn-sm"
+                               asp-controller="Resena"
+                               asp-action="Index">
+                                Gestionar reseñas
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                @if (Model.Resenas == null || Model.Resenas.Count == 0)
+                {
+                    <div style="color:var(--color-muted);">
+                        Todavía no hay reseñas para este producto.
+                    </div>
+                }
+                else
+                {
+                    <div class="detail-list">
+                        @foreach (var r in Model.Resenas.OrderByDescending(x => x.Fecha))
+                        {
+                            <div class="profile-field">
+                                <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+                                    <div class="profile-label">@r.UsuarioEmail</div>
+                                    <div style="display:flex; gap:8px; align-items:center;">
+                                        <span class="profile-badge primary">@r.Nota / 10</span>
+
+                                        @if (Model.EsAdmin)
+                                        {
+                                            <form asp-controller="Resena" asp-action="DeleteFromProducto" method="post" style="margin:0;">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="idResena" value="@r.Id" />
+                                                <input type="hidden" name="productoId" value="@p.Id" />
+                                                <button type="submit" class="btn ghost-btn btn-sm"
+                                                        onclick="return confirm('¿Borrar esta reseña?');">
+                                                    Borrar
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="cart-muted" style="margin-top:6px;">
+                                    @r.Fecha.ToString("yyyy-MM-dd")
+                                </div>
+
+                                <div style="margin-top:8px; line-height:1.5;">
+                                    @(string.IsNullOrWhiteSpace(r.Descripcion) ? "(Sin texto)" : r.Descripcion)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
             </div>
         </div>
+
     </div>
 </section>

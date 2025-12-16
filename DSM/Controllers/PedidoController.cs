@@ -18,34 +18,59 @@ namespace DSM.Controllers
         // GET: PedidoController
         public ActionResult Index()
         {
+            var u = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            if (u == null) return RedirectToAction("Login", "Usuario");
+
+            bool isAdmin = HttpContext.Session.GetString("IsAdmin") == "true";
+
             SessionInitialize();
             PedidoRepository pedidoRepository = new PedidoRepository(session);
             PedidoCEN pedidoCEN = new PedidoCEN(pedidoRepository);
 
             IList<PedidoEN> listEN = pedidoCEN.ReadAll(0, -1);
 
-            IEnumerable<PedidoViewModel> listVM =
-                new PedidoAssembler().ConvertListENToViewModel(listEN).ToList();
+            // Si NO es admin, filtra por usuario (ajusta si tu propiedad se llama distinto)
+            if (!isAdmin)
+            {
+                listEN = listEN
+                    .Where(p => p.Usuario != null && p.Usuario.Email == u.email)
+                    .ToList();
+            }
 
+            var listVM = new PedidoAssembler().ConvertListENToViewModel(listEN).ToList();
             SessionClose();
 
             return View(listVM);
         }
 
+
         // GET: PedidoController/Details/5
         public ActionResult Details(int id)
         {
+            var u = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            if (u == null) return RedirectToAction("Login", "Usuario");
+
+            bool isAdmin = HttpContext.Session.GetString("IsAdmin") == "true";
+
             SessionInitialize();
-            PedidoRepository pedidoRepository = new PedidoRepository(session);
-            PedidoCEN pedidoCEN = new PedidoCEN(pedidoRepository);
+            var pedidoRepository = new PedidoRepository(session);
+            var pedidoCEN = new PedidoCEN(pedidoRepository);
 
-            PedidoEN pedidoEN = pedidoCEN.ReadOID(id);
-            PedidoViewModel pedidoView = new PedidoAssembler().ConvertENToModelUI(pedidoEN);
+            var pedidoEN = pedidoCEN.ReadOID(id);
 
+            // Si NO es admin, solo puede ver pedidos suyos
+            if (!isAdmin && (pedidoEN?.Usuario == null || pedidoEN.Usuario.Email != u.email))
+            {
+                SessionClose();
+                return RedirectToAction("Index", "Home");
+            }
+
+            var pedidoView = new PedidoAssembler().ConvertENToModelUI(pedidoEN);
             SessionClose();
 
             return View(pedidoView);
         }
+
 
         // GET: PedidoController/Ver/5
         public ActionResult Ver(int id)

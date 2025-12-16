@@ -1,42 +1,59 @@
 @model DSM.Models.ResenaViewModel
+
 @{
     ViewData["Title"] = "Editar reseña";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Editar Reseña</h1>
+<section class="section form-page">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>EDITAR RESEÑA</h2>
+            <p>Gestión administrativa de reseñas.</p>
+        </div>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="ProductoId" class="control-label"></label>
-        <input asp-for="ProductoId" class="form-control" readonly />
+        <form asp-action="Edit" method="post" class="form-layout">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-field">
+                <label asp-for="ProductoId"></label>
+                <input asp-for="ProductoId" class="form-input" readonly />
+            </div>
+
+            <div class="form-field">
+                <label asp-for="UsuarioEmail"></label>
+                <input asp-for="UsuarioEmail" class="form-input" readonly />
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Nota"></label>
+                <input asp-for="Nota" class="form-input" type="number" min="0" max="10" />
+                <span asp-validation-for="Nota" class="form-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Fecha"></label>
+                <input asp-for="Fecha" class="form-input" type="date" />
+                <span asp-validation-for="Fecha" class="form-error"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Descripcion"></label>
+                <textarea asp-for="Descripcion" class="form-textarea" rows="6"></textarea>
+                <span asp-validation-for="Descripcion" class="form-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn primary-btn" type="submit">Guardar</button>
+                <a class="btn ghost-btn" asp-action="Index">Cancelar</a>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="UsuarioEmail" class="control-label"></label>
-        <input asp-for="UsuarioEmail" class="form-control" readonly />
-    </div>
-    <div class="form-group">
-        <label asp-for="Nota" class="control-label"></label>
-        <input asp-for="Nota" class="form-control" />
-        <span asp-validation-for="Nota" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Fecha" class="control-label"></label>
-        <input asp-for="Fecha" class="form-control" />
-        <span asp-validation-for="Fecha" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Descripcion" class="control-label"></label>
-        <textarea asp-for="Descripcion" class="form-control" rows="5"></textarea>
-        <span asp-validation-for="Descripcion" class="text-danger"></span>
-    </div>
-    <div class="form-group mt-2">
-        <input type="submit" value="Guardar" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-    </div>
-</form>
+</section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

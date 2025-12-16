@@ -1,50 +1,67 @@
 @model IEnumerable<DSM.Models.ResenaViewModel>
+
 @{
     ViewData["Title"] = "Reseñas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Reseñas</h1>
+<section class="section">
+    <div class="section-header section-header-row">
+        <div>
+            <div class="section-kicker">Admin</div>
+            <h2>RESEÑAS</h2>
+        </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Crear nueva reseña</a>
-</p>
+        <a class="btn ghost-btn" asp-controller="Resena" asp-action="Index">Actualizar</a>
+    </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Producto</th>
-            <th>Usuario</th>
-            <th>Nota</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @if (Model != null && Model.Any())
+    @if (Model == null || !Model.Any())
     {
-        foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.ProductoId</td>
-                <td>@item.UsuarioEmail</td>
-                <td>@item.Nota</td>
-                <td>@item.Fecha.ToString("yyyy-MM-dd")</td>
-                <td>@(item.Descripcion?.Length > 100 ? item.Descripcion.Substring(0, 100) + "..." : item.Descripcion)</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('¿Seguro que desea eliminar esta reseña?');">Eliminar</a>
-                </td>
-            </tr>
-        }
+        <div class="detail-card">
+            <p>No hay reseñas.</p>
+        </div>
     }
     else
     {
-        <tr><td colspan="7">No hay reseñas</td></tr>
+        <div class="invoice-grid">
+            @foreach (var r in Model.OrderByDescending(x => x.Fecha))
+            {
+                <article class="invoice-card">
+                    <div class="invoice-header">
+                        <div class="invoice-id">
+                            <div class="invoice-label">Producto</div>
+                            <div class="invoice-number">ID: @r.ProductoId</div>
+                            <div class="invoice-date">@r.UsuarioEmail</div>
+                        </div>
+
+                        <div class="invoice-total">
+                            <div class="invoice-label">Nota</div>
+                            <div class="invoice-total-amount">@r.Nota / 10</div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-body">
+                        <div class="invoice-total">
+                            <div class="invoice-label">Fecha</div>
+                            <div>@r.Fecha.ToString("yyyy-MM-dd")</div>
+                        </div>
+                    </div>
+
+                    <div style="color:var(--color-muted); font-size:.9rem; line-height:1.45;">
+                        @(string.IsNullOrWhiteSpace(r.Descripcion)
+                                        ? "(Sin descripción)"
+                                        : (r.Descripcion.Length > 160 ? r.Descripcion.Substring(0, 160) + "..." : r.Descripcion))
+                    </div>
+
+                    <div class="invoice-actions">
+                        <a class="btn ghost-btn btn-sm" asp-action="Details" asp-route-id="@r.Id">Detalles</a>
+                        <a class="btn ghost-btn btn-sm" asp-action="Edit" asp-route-id="@r.Id">Editar</a>
+                        <a class="btn ghost-btn btn-sm invoice-delete"
+                           asp-action="Delete" asp-route-id="@r.Id"
+                           onclick="return confirm('¿Seguro que desea eliminar esta reseña?');">Eliminar</a>
+                    </div>
+                </article>
+            }
+        </div>
     }
-    </tbody>
-</table>
+</section>

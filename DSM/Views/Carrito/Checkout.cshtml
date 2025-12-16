@@ -1,0 +1,46 @@
+﻿@using System.Linq
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Finalizar pago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var metodos = (ViewBag.MetodosPago as IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)
+                  ?? Enumerable.Empty<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+}
+
+
+<section class="section form-page">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>Finalizar pago</h2>
+            <p>Selecciona un método de pago y confirma el pedido.</p>
+        </div>
+
+        @if (!metodos.Any())
+        {
+            <p class="form-error">No hay métodos de pago disponibles.</p>
+            <a class="btn ghost-btn" asp-controller="Carrito" asp-action="Index">Volver al carrito</a>
+        }
+        else
+        {
+            <form asp-action="Checkout" method="post" class="form-layout">
+                @Html.AntiForgeryToken()
+
+                <div class="form-field">
+                    <label for="metodoPagoId">Método de pago</label>
+                    <select id="metodoPagoId" name="metodoPagoId" class="form-select" required>
+                        @foreach (var m in metodos)
+                        {
+                            <option value="@m.Value">@m.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn primary-btn" type="submit">Confirmar pedido</button>
+                    <a class="btn ghost-btn" asp-controller="Carrito" asp-action="Index">Cancelar</a>
+                </div>
+            </form>
+        }
+    </div>
+</section>

@@ -1,6 +1,7 @@
 ﻿@using DSM.Models
 @{
     var u = Context.Session.Get<UsuarioViewModel>("usuario");
+    var esAdmin = (u?.Rol == "Admin");
 }
 
 <!DOCTYPE html>
@@ -29,7 +30,7 @@
         <div class="topbar topbar-main">
             <div class="topbar-inner">
                 <a class="logo-link" asp-controller="Home" asp-action="Index">
-                    <img src="~/img/logo.png" alt="DSM" class="logo" />
+                    <img src="~/img/logo.png" alt="TempoShop" class="logo" />
                 </a>
 
                 <nav class="navbar navbar-expand-sm navbar-light bg-white">
@@ -40,46 +41,50 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="main-menu navbar-nav flex-grow-1">
 
+                            <!-- Común -->
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
                             </li>
 
-                            @* ---------- MENÚ ADMIN ---------- *@
-                            @if (u?.Rol == "Admin")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Producto" asp-action="Index">Productos (Admin)</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Factura" asp-action="Index">Facturas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Estanteria" asp-action="Index">Estanterías</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Pedido" asp-action="Index"><b>Pedidos</b></a>
-                                </li>
-                            }
-                            else
-                            {
-                                @* ---------- MENÚ USUARIO ---------- *@
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Tienda" asp-action="Catalogo">Productos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Carrito" asp-action="Index">Carrito</a>
-                                </li>
-                            }
-
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacidad</a>
-                            </li>
-
                             @if (u != null)
                             {
+                                if (esAdmin)
+                                {
+                                    <!-- ===== MENÚ ADMIN (Backoffice) ===== -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Producto" asp-action="Index">Productos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Pedido" asp-action="Index"><b>Pedidos</b></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Resena" asp-action="Index">Reseñas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Factura" asp-action="Index">Facturas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Estanteria" asp-action="Index">Estanterías</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <!-- ===== MENÚ USUARIO (Tienda) ===== -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Tienda" asp-action="Catalogo">Catálogo</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Carrito" asp-action="Index">Carrito</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Pedido" asp-action="Index">Mis pedidos</a>
+                                    </li>
+                                }
+
+                                <!-- Común logueado -->
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Usuario" asp-action="Perfil">Perfil</a>
                                 </li>
@@ -87,6 +92,20 @@
                                     <a class="nav-link" asp-controller="Usuario" asp-action="Logout">Salir</a>
                                 </li>
                             }
+                            else
+                            {
+                                <!-- No logueado -->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Tienda" asp-action="Catalogo">Catálogo</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Usuario" asp-action="Login">Entrar</a>
+                                </li>
+                            }
+
                         </ul>
                     </div>
                 </nav>
@@ -103,7 +122,7 @@
     <footer class="site-footer">
         <div class="footer-links">
             <a href="#">Aviso legal</a>
-            <a href="#">Privacidad</a>
+            <a asp-controller="Home" asp-action="Privacy">Privacidad</a>
             <a href="#">Contacto</a>
         </div>
     </footer>
