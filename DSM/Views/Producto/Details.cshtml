@@ -50,7 +50,7 @@
         @if (Model != null && Model.Fotos != null)
         {
             <dd class="col-sm-10">
-                <img src="@Html.DisplayFor(model => model.Fotos)" height="150" width="150" />
+                <img src="@(Model.Fotos.StartsWith("/") ? Model.Fotos : "/img/" + Model.Fotos)" height="150" width="150" />
 
             </dd>
         }

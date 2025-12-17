@@ -24,29 +24,9 @@ namespace DSM.Controllers
         // ============================
         public ActionResult Producto(int productoId)
         {
-            var u = GetUser();
-            if (u == null) return RedirectToAction("Login", "Usuario");
-
-            try
-            {
-                SessionInitialize();
-                var repo = new ReseñaRepository(session);
-                var cen = new ReseñaCEN(repo);
-
-                var listEN = cen.ReadAll(0, -1);
-                var listVM = new ResenaAssembler()
-                    .ConvertListENToViewModel(listEN)
-                    .Where(r => r.ProductoId == productoId)
-                    .OrderByDescending(r => r.Fecha)
-                    .ToList();
-
-                ViewBag.ProductoId = productoId;
-                return View("Producto", listVM);
-            }
-            finally
-            {
-                try { SessionClose(); } catch { }
-            }
+            // Redirigir a la vista de detalle del producto en la tienda,
+            // donde se muestran las reseñas.
+            return RedirectToAction("Producto", "Tienda", new { id = productoId });
         }
 
         // ============================
@@ -258,6 +238,27 @@ namespace DSM.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return View(model);
             }
+        }
+
+        // ============================
+        // ADMIN: borrar resea (GET)
+        // GET: /Resena/Delete/5
+        // ============================
+        public ActionResult Delete(int id)
+        {
+            var u = GetUser();
+            if (u == null) return RedirectToAction("Login", "Usuario");
+            if (!IsAdmin()) return RedirectToAction("Index", "Home");
+
+            try
+            {
+                var repo = new ReseñaRepository();
+                var cen = new ReseñaCEN(repo);
+                cen.Destroy(id);
+            }
+            catch { }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -157,7 +157,7 @@ namespace InitializeDB
                 int idMetodoPago3 = metodopagocen.New_(idUsuario3, PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.TipoPagoEnum.Visa, true);
                 Console.WriteLine("Se ha creado el metodo de pago (Visa) para usuario 3 correctamente");
 
-                int idMetodoPago4 = metodopagocen.New_(idUsuario3, PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.TipoPagoEnum.paypal, true);
+                int idMetodoPago4 = metodopagocen.New_(idUsuario3, PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.TipoPagoEnum.PayPal, true);
                 Console.WriteLine("Se ha creado el metodo de pago (PayPal) para usuario 3 correctamente");
 
                 // Productos (ANTES estaban mal: fotovinilo1.png/fotocd1.png/fotovinilo2.png no existen en wwwroot/img)

@@ -68,12 +68,16 @@ namespace DSM.Controllers
 
             try
             {
+                // Obtener usuario actual de la sesión
+                var usuario = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+                string emailAdmin = usuario != null ? usuario.email : "admin@gmail.com"; // Fallback seguro
+
                 MetodoPagoRepository metRepo = new MetodoPagoRepository();
                 MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
 
                 // Los administradores deben proporcionar el tipo de pago
                 metCEN.New_(
-                   "admin@sistema.local",  // Usuario admin del sistema
+                   emailAdmin,
                    met.TipoPago,
                    met.Valido
                 );

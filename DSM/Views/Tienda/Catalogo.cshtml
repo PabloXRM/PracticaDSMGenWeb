@@ -60,6 +60,7 @@
                                 // 5) Solo nombre de fichero -> asumir wwwroot/img/
                                 else
                                 {
+                                    // FIX: Asegurar que no se duplique la ruta si ya viene correcta
                                     foto = Url.Content("~/img/" + raw.TrimStart('/'));
                                 }
                             }
@@ -67,7 +68,8 @@
 
                         <img src="@foto"
                              alt="@(p?.Descripcion ?? "Producto")"
-                             onerror="this.onerror=null;this.src='@Url.Content("~/img/cd1.png")';" />
+                             onerror="this.onerror=null;this.src='@Url.Content("~/img/cd1.png")';" 
+                             loading="lazy" />
                     </div>
 
                     <div class="shop-info">

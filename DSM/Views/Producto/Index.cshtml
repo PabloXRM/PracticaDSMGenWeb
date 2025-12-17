@@ -41,7 +41,53 @@
                     <article class="disc-card product-card">
 
                         <div class="product-image-wrapper">
-                            <img src="~/img/cd1.png" alt="@item.Descripcion" />
+                            @{
+                                var fallback = Url.Content("~/img/cd1.png");
+                                var foto = fallback;
+
+                                var raw = item?.Fotos?.Trim();
+
+                                if (!string.IsNullOrWhiteSpace(raw))
+                                {
+                                    // Si viene una lista tipo "a.png;b.png" o "a.png,b.png", coger la primera
+                                    raw = raw.Split(';', ',')[0].Trim();
+
+                                    // Quitar comillas si viniera "\"cd1.png\""
+                                    raw = raw.Trim('\"', '\'');
+
+                                    // 1) URL absoluta
+                                    if (raw.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                                    raw.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        foto = raw;
+                                    }
+                                    // 2) Rutas web absolutas o con ~
+                                    else if (raw.StartsWith("~/", StringComparison.Ordinal) || raw.StartsWith("/", StringComparison.Ordinal))
+                                    {
+                                        foto = Url.Content(raw.StartsWith("~/", StringComparison.Ordinal) ? raw : ("~" + raw));
+                                    }
+                                    // 3) Rutas con carpeta relativa tipo "img/a.png" o "Images/a.png"
+                                    else if (raw.StartsWith("img/", StringComparison.OrdinalIgnoreCase) ||
+                                    raw.StartsWith("images/", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        foto = Url.Content("~/" + raw.TrimStart('/'));
+                                    }
+                                    // 4) Rutas Windows o inválidas para web -> fallback
+                                    else if (raw.Contains(@"\") || raw.Contains(":"))
+                                    {
+                                        foto = fallback;
+                                    }
+                                    // 5) Solo nombre de fichero -> asumir wwwroot/img/
+                                    else
+                                    {
+                                        foto = Url.Content("~/img/" + raw.TrimStart('/'));
+                                    }
+                                }
+                            }
+                            <img src="@foto"
+                                 alt="@(item?.Descripcion ?? "Producto")"
+                                 onerror="this.onerror=null;this.src='@Url.Content("~/img/cd1.png")';"
+                                 loading="lazy" />
                         </div>
 
                         <div class="disc-info product-info">
@@ -60,7 +106,8 @@
                             <div class="product-actions">
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn ghost-btn btn-sm">Detalles</a>
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn primary-btn btn-sm">Editar</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn ghost-btn btn-sm product-delete">
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn ghost-btn btn-sm product-delete"
+                                   onclick="return confirm('¿Estás seguro de que quieres borrar este producto?');">
                                     Borrar
                                 </a>
                             </div>

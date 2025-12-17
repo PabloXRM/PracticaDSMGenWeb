@@ -7,7 +7,10 @@ namespace DSM.Models
     {
         [ScaffoldColumn(false)]
         public int Id { get; set; }
-        public TipoPagoEnum TipoPago { get; internal set; }
+        
+        [Required(ErrorMessage = "El tipo de pago es obligatorio")]
+        [Display(Name = "Tipo de Pago")]
+        public TipoPagoEnum TipoPago { get; set; }
 
         public bool Valido { get; set; }
     }
