@@ -2039,6 +2039,162 @@ body {
 }
 
 
+/* ============================
+   PRODUCT DETAILS (FIXED)
+   ============================ */
+
+.product-detail-card {
+    background: var(--color-card);
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.06);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+}
+
+.product-detail-media {
+    background: rgba(0,0,0,0.03);
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .product-detail-media img {
+        width: 100%;
+        max-width: 320px;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: var(--shadow-soft);
+    }
+
+/* Content */
+.product-detail-content {
+    padding: 22px;
+}
+
+.product-detail-title {
+    margin: 0 0 10px;
+    font-size: 1.6rem;
+    letter-spacing: .01em;
+}
+
+/* Badges SOLO dentro de product details (para no “romper” las otras páginas) */
+.product-detail-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 14px;
+}
+
+    .product-detail-badges .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--color-primary-soft);
+        color: var(--color-primary);
+        font-size: .78rem;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+        border: 1px solid rgba(0,0,0,0.06);
+    }
+
+/* Price row */
+.product-detail-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 8px 0 16px;
+}
+
+.product-detail-price {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.product-detail-stock {
+    font-size: .9rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.03);
+}
+
+    .product-detail-stock.in {
+        background: rgba(46,204,113,0.16);
+        color: #1b7a3a;
+        border-color: rgba(46,204,113,0.25);
+    }
+
+    .product-detail-stock.out {
+        background: rgba(224,49,49,0.14);
+        color: #b42323;
+        border-color: rgba(224,49,49,0.22);
+    }
+
+/* Details list (dl) */
+.product-detail-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+    /* el dl contiene divs (como lo tienes). Los hacemos “cards” */
+    .product-detail-list > div {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* “Reset” para dt/dd por si Bootstrap o CSS global los pisa */
+    .product-detail-list dt {
+        margin: 0;
+        font-size: .78rem;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+    }
+
+    .product-detail-list dd {
+        margin: 0;
+        color: var(--color-text);
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+/* Actions */
+.product-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+    .product-detail-card {
+        grid-template-columns: 1fr;
+    }
+
+    .product-detail-media {
+        padding: 18px;
+    }
+
+    .product-detail-list > div {
+        grid-template-columns: 1fr;
+    }
+}
 
 
 

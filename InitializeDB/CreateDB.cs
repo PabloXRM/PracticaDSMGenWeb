@@ -253,6 +253,20 @@ namespace InitializeDB
                     "cd11.png",
                     "Dance Nation");
 
+                int idProducto14 = productocen.New_(
+                    "Vinilo Reggaeton Latino", 35, 22,
+                    PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.FormatoEnum.vinilo,
+                    PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.EstiloEnum.reggaeton,
+                    "vinilor.jpg",
+                    "Bad Bunny");
+
+                int idProducto15 = productocen.New_(
+                    "CD Hip Hop 90s", 12, 202,
+                    PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.FormatoEnum.cd,
+                    PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM.EstiloEnum.hiphop,
+                    "cdh.jpg",
+                    "DR.DRE");
+
                 Console.WriteLine("Se han creado todos los productos correctamente");
 
                 IList<int> productosIds = new List<int> { idProducto, idProducto2, idProducto3, idProducto4, idProducto5, idProducto6, idProducto7, idProducto8, idProducto9, idProducto10, idProducto11, idProducto12, idProducto13 };
