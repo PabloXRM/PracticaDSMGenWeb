@@ -2038,3 +2038,44 @@ body {
     }
 }
 
+
+
+
+
+
+/* ========================= */
+/*      RRSS HEADER          */
+/* ========================= */
+
+.nav-social {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    background-color: #d8895d; /* color corporativo */
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
+}
+
+    .social-link img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+        filter: brightness(0) invert(1); /* icono blanco */
+    }
+
+    /* Hover elegante */
+    .social-link:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(216, 137, 93, 0.45);
+        opacity: 0.95;
+    }
+
