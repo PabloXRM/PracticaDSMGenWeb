@@ -1,27 +1,53 @@
 @model DSM.Models.PedidoViewModel
+@using Microsoft.AspNetCore.Http
 
 @{
     ViewData["Title"] = "Detalles de pedido";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalles</h1>
+<section class="section form-page">
+    <div class="detail-card">
+        <div class="form-header">
+            <h2>Detalles del Pedido</h2>
+            <p>Información completa sobre el pedido @Model.Numero</p>
+        </div>
 
-<dl class="row">
-    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Numero)</dt>
-    <dd class="col-sm-10">@Html.DisplayFor(model => model.Numero)</dd>
+        <div class="detail-list">
+            <div class="detail-row">
+                <span class="detail-label">@Html.DisplayNameFor(model => model.Numero)</span>
+                <span class="detail-value">@Html.DisplayFor(model => model.Numero)</span>
+            </div>
 
-    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Fecha)</dt>
-    <dd class="col-sm-10">@Html.DisplayFor(model => model.Fecha)</dd>
+            <div class="detail-row">
+                <span class="detail-label">@Html.DisplayNameFor(model => model.Fecha)</span>
+                <span class="detail-value">@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
 
-    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.TotalPrecio)</dt>
-    <dd class="col-sm-10">@Html.DisplayFor(model => model.TotalPrecio)</dd>
+            <div class="detail-row">
+                <span class="detail-label">@Html.DisplayNameFor(model => model.TotalPrecio)</span>
+                <span class="detail-value" style="color: var(--color-primary); font-size: 1.1rem;">@Model.TotalPrecio.ToString("C")</span>
+            </div>
 
-    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.EstadoPedido)</dt>
-    <dd class="col-sm-10">@Html.DisplayFor(model => model.EstadoPedido)</dd>
-</dl>
+            <div class="detail-row">
+                <span class="detail-label">@Html.DisplayNameFor(model => model.EstadoPedido)</span>
+                <span class="detail-value">
+                    <span class="badge">@Html.DisplayFor(model => model.EstadoPedido)</span>
+                </span>
+            </div>
+        </div>
 
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Volver a la lista</a>
-</p>
+        <div class="form-actions" style="justify-content: space-between; margin-top: 30px;">
+            <a asp-action="Index" class="btn ghost-btn">Volver a la lista</a>
+            
+            <div style="display: flex; gap: 10px;">
+                <a asp-action="Factura" asp-route-id="@Model.Id" class="btn primary-btn">Ver Factura</a>
+                
+                @if (Context.Session.GetString("IsAdmin") == "true")
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn secondary-btn">Editar</a>
+                }
+            </div>
+        </div>
+    </div>
+</section>

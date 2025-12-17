@@ -311,8 +311,6 @@ namespace DSM.Controllers
             }
         }
 
-
-
         // GET: UsuarioController
         public ActionResult Index()
         {
@@ -395,5 +393,70 @@ namespace DSM.Controllers
             return RedirectToAction("Login", "Usuario");
         }
 
+        // GET: UsuarioController/MisMetodosPago
+        public ActionResult MisMetodosPago()
+        {
+            var u = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            if (u == null)
+                return RedirectToAction("Login", "Usuario");
+
+            try
+            {
+                SessionInitialize();
+
+                MetodoPagoRepository metRepo = new MetodoPagoRepository(session);
+                MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
+
+                // Obtener todos los métodos de pago disponibles (no filtrado por usuario)
+                IList<MetodoPagoEN> metodosEN = metCEN.ReadAll(0, -1)
+                    .Where(m => m.Valido)  // Solo mostrar métodos habilitados
+                    .ToList();
+
+                IEnumerable<MetodoPagoViewModel> metodosVM =
+                    new MetodoPagoAssembler().ConvertListENToViewModel(metodosEN).ToList();
+
+                SessionClose();
+                return View(metodosVM);
+            }
+            catch
+            {
+                try { SessionClose(); } catch { }
+                return RedirectToAction("Perfil", "Usuario");
+            }
+        }
+
+        // GET: UsuarioController/EstanteriaVirtual
+        public ActionResult EstanteriaVirtual()
+        {
+            var u = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            if (u == null)
+                return RedirectToAction("Login", "Usuario");
+
+            try
+            {
+                SessionInitialize();
+
+                EstanteriaRepository estRepo = new EstanteriaRepository(session);
+                EstanteriaCEN estCEN = new EstanteriaCEN(estRepo);
+
+                // Obtener todas las estanterías del usuario
+                IList<EstanteriaEN> estanteriasEN = estCEN.ReadAll(0, -1)
+                    .Where(e => e.Usuario != null && e.Usuario.Email == u.email)
+                    .ToList();
+
+                // Convertir a ViewModel
+                var estanteriasVM = new EstanteriaVirtualAssembler()
+                    .ConvertListENToViewModel(estanteriasEN)
+                    .ToList();
+
+                SessionClose();
+                return View(estanteriasVM);
+            }
+            catch
+            {
+                try { SessionClose(); } catch { }
+                return RedirectToAction("Perfil", "Usuario");
+            }
+        }
     }
 }

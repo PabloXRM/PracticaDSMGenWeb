@@ -51,6 +51,52 @@
 <br>
 <hr>
 
+@if (Model.ProductosRecomendados != null && Model.ProductosRecomendados.Count > 0)
+{
+    <section class="section section-recommendation">
+        <div class="section-header">
+            <h2>✨ Recomendaciones especiales</h2>
+        </div>
+
+        <div class="cards-row-recommendations">
+            @foreach (var producto in Model.ProductosRecomendados)
+            {
+                <article class="disc-card featured">
+                    @{
+                        string imagenPath = Url.Content("~/img/cd1.png");
+                        if (!string.IsNullOrEmpty(producto.Fotos))
+                        {
+                            if (!producto.Fotos.StartsWith("http") && !producto.Fotos.StartsWith("/"))
+                            {
+                                imagenPath = Url.Content("~/img/" + producto.Fotos);
+                            }
+                            else
+                            {
+                                imagenPath = producto.Fotos;
+                            }
+                        }
+                    }
+                    <img src="@imagenPath" alt="@producto.Descripcion" />
+                    <div class="card-info">
+                        <h3>@producto.Descripcion</h3>
+                        <p class="artist">@producto.Artista</p>
+                        <p class="price">@producto.Precio.ToString("C")</p>
+                        <div class="card-actions">
+                            <a class="btn primary-btn" asp-controller="Tienda" asp-action="Producto" asp-route-id="@producto.Id">Ver detalles</a>
+                            <a class="btn secondary-btn" asp-controller="Carrito" asp-action="AñadirAlCarrito" asp-route-id="@producto.Id">Añadir al carrito</a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+
+        <div class="section-cta">
+            <p style="text-align:center; color:#666;">Descubre los mejores álbumes de nuestro catálogo</p>
+        </div>
+    </section>
+    <hr>
+}
+
 <section class="section section-reserve">
     <div class="section-header">
         <h2>Reserva el último disco de Xxxxx</h2>
@@ -72,14 +118,14 @@
     </div>
 
     <div class="section-cta">
-        <button class="btn primary-btn">Descubre más</button>
+        <a class="btn primary-btn" asp-controller="Tienda" asp-action="Catalogo">Descubre más</a>
     </div>
 </section>
 
 <section class="section section-offers">
     <div class="section-header section-header-row">
         <h2>Ofertas</h2>
-        <button class="btn ghost-btn">Ver todo</button>
+        <a class="btn ghost-btn" asp-controller="Tienda" asp-action="Catalogo">Ver todo</a>
     </div>
 
     <div class="cards-row small">
@@ -99,7 +145,7 @@
     <div class="section-inner">
         <div class="section-header section-header-row">
             <h2>Novedades</h2>
-            <button class="btn ghost-btn">Ver todo</button>
+            <a class="btn ghost-btn" asp-controller="Tienda" asp-action="Catalogo">Ver todo</a>
         </div>
 
         <div class="cards-row">

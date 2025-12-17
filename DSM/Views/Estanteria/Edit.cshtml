@@ -1,47 +1,94 @@
 ﻿@model DSM.Models.EstanteriaViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Estantería Virtual";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Editar Estanteria</h1>
+<div class="profile-page">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div>
+                <h1 class="profile-title">Editar Estantería</h1>
+                <p class="profile-subtitle">Modifica el nombre de tu estantería o añade nuevos productos.</p>
+            </div>
+        </div>
 
-<h4>Estanteria</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
+        <div class="profile-divider"></div>
+
+        <!-- Sección de edición básica -->
+        <div style="margin-bottom: 30px;">
+            <h3 style="margin: 0 0 16px 0; font-size: 1.1rem; font-weight: 700;">Información de la Estantería</h3>
+            
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="form-validation-summary"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-field">
+                    <label asp-for="Descripcion" class="form-label">Nombre</label>
+                    <input asp-for="Descripcion" class="form-input" placeholder="Ej: Mi colección de Rock" required />
+                    <span asp-validation-for="Descripcion" class="form-error"></span>
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn primary-btn">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sección de productos -->
+        <div class="profile-divider"></div>
+        
+        <div style="margin-top: 30px;">
+            <h3 style="margin: 0 0 16px 0; font-size: 1.1rem; font-weight: 700;">Productos en esta Estantería</h3>
+            
+            @if (Model.Productos == null || Model.Productos.Count == 0)
+            {
+                <div style="padding: 20px; text-align: center; background: rgba(0,0,0,0.03); border-radius: 12px; color: var(--color-muted); margin-bottom: 16px;">
+                    <p style="margin: 0;">Esta estantería no tiene productos aún.</p>
+                </div>
+            }
+            else
+            {
+                <div class="estanteria-products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                    @foreach (var producto in Model.Productos)
+                    {
+                        <div style="background: var(--color-card); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft); text-align: center; padding: 10px;">
+                            @{
+                                string imagenPath = Url.Content("~/img/cd1.png");
+                                if (!string.IsNullOrEmpty(producto.Fotos))
+                                {
+                                    if (!producto.Fotos.StartsWith("http") && !producto.Fotos.StartsWith("/"))
+                                    {
+                                        imagenPath = Url.Content("~/img/" + producto.Fotos);
+                                    }
+                                    else
+                                    {
+                                        imagenPath = producto.Fotos;
+                                    }
+                                }
+                            }
+                            <img src="@imagenPath" alt="@producto.Descripcion" style="width: 100%; height: 80px; object-fit: contain; margin-bottom: 8px;" />
+                            <p style="margin: 0 0 4px 0; font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">@producto.Descripcion</p>
+                            <p style="margin: 0; font-size: 0.75rem; color: var(--color-muted);">@producto.Precio.ToString("C")</p>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div style="margin-top: 16px; padding: 16px; background: rgba(217,137,91,0.1); border: 1px solid rgba(217,137,91,0.2); border-radius: 12px;">
+                <p style="margin: 0 0 12px 0; color: var(--color-muted); font-size: 0.9rem;">
+                    💡 Para añadir productos a esta estantería, ve al catálogo y busca los productos que quieres. En la vista de cada producto encontrarás la opción de añadirlo a esta estantería.
+                </p>
+                <a href="@Url.Action("Catalogo", "Tienda")" class="btn primary-btn" style="display: inline-block;">Ir al Catálogo</a>
             </div>
-            <div class="form-group">
-                <label asp-for="Valoracion" class="control-label"></label>
-                <input asp-for="Valoracion" class="form-control" />
-                <span asp-validation-for="Valoracion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Visitas" class="control-label"></label>
-                <input asp-for="Visitas" class="form-control" />
-                <span asp-validation-for="Visitas" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Visible" /> @Html.DisplayNameFor(model => model.Visible)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+
+        <div class="profile-actions" style="margin-top: 30px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px;">
+            <a asp-controller="Usuario" asp-action="EstanteriaVirtual" class="btn ghost-btn">Volver a Mis Estanterías</a>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

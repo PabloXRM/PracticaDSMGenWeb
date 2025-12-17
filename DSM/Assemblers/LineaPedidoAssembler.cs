@@ -17,6 +17,11 @@ namespace DSM.Assemblers
             if (en.Pedido != null)
                 lp.IdPedido = en.Pedido.Id;
 
+            if (en.Producto != null)
+            {
+                lp.Producto = new ProductoAssembler().ConvertENToModelUI(en.Producto);
+            }
+
             return lp;
         }
 

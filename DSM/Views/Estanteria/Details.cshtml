@@ -1,43 +1,38 @@
 ﻿@model DSM.Models.EstanteriaViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de la Estantería";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalles de la Estanteria</h1>
+<section class="section">
+    <div class="section-header section-header-row">
+        <div>
+            <div class="section-kicker">Estantería</div>
+            <h2>DETALLES</h2>
+        </div>
+        <a class="btn ghost-btn" asp-action="Index">Volver a la lista</a>
+    </div>
 
-<div>
-    <h4>Estanteria</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Valoracion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Valoracion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Visitas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Visitas)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Visible)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Visible)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="detail-card">
+        <div class="detail-list">
+            <div class="detail-row">
+                <div class="detail-label">Descripción</div>
+                <div class="detail-value">@Model.Descripcion</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Valoración</div>
+                <div class="detail-value">@Model.Valoracion</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Visitas</div>
+                <div class="detail-value">@Model.Visitas</div>
+            </div>
+
+        <div class="form-actions" style="margin-top:16px;">
+            <a class="btn primary-btn" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+        </div>
+    </div>
+</section>

@@ -1,4 +1,5 @@
 
+
 using System;
 using System.Text;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
@@ -218,6 +219,17 @@ public void Destroy (int id
         {
                 SessionInitializeTransaction ();
                 ProductoNH productoNH = (ProductoNH)session.Load (typeof(ProductoNH), id);
+
+                // Manually remove the product from associated Estanterias to avoid FK constraint violation
+                if (productoNH.Estanteria != null && productoNH.Estanteria.Count > 0) {
+                        System.Collections.Generic.IList<PracticaDSMGen.ApplicationCore.EN.PracticaDSM.EstanteriaEN> estanterias = new System.Collections.Generic.List<PracticaDSMGen.ApplicationCore.EN.PracticaDSM.EstanteriaEN> (productoNH.Estanteria);
+                        foreach (PracticaDSMGen.ApplicationCore.EN.PracticaDSM.EstanteriaEN estanteria in estanterias) {
+                                estanteria.Producto.Remove (productoNH);
+                                session.Update (estanteria);
+                        }
+                        productoNH.Estanteria.Clear ();
+                }
+
                 session.Delete (productoNH);
                 SessionCommit ();
         }

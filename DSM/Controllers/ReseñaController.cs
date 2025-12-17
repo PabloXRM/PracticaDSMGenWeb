@@ -81,25 +81,39 @@ namespace DSM.Controllers
 
             try
             {
+                // Obtener usuario actual de la sesión
+                var usuario = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+                if (usuario == null)
+                {
+                    return RedirectToAction("Login", "Usuario");
+                }
+
                 ReseñaRepository resRepo = new ReseñaRepository();
                 ReseñaCEN resCEN = new ReseñaCEN(resRepo);
 
-                string emailUsuario = "cliente@demo.com";
-
+                // Usar email del usuario logueado y fecha actual automáticamente
                 resCEN.New_(
-                    emailUsuario,
-                    res.IdProducto,     // ahora cogemos el valor del SELECT
+                    usuario.email,
+                    res.IdProducto,
                     res.Descripcion,
                     res.Nota,
-                    res.Fecha
+                    DateTime.Now  // Fecha automática, no editable por el usuario
                 );
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Producto", "Tienda", new { id = res.IdProducto });
             }
             catch (Exception ex)
             {
                 var msg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 ModelState.AddModelError(string.Empty, msg);
+                
+                SessionInitialize();
+                ProductoRepository pRepo = new ProductoRepository(session);
+                ProductoCEN pCEN = new ProductoCEN(pRepo);
+                var productos = pCEN.ReadAll(0, -1);
+                ViewBag.Productos = new SelectList(productos, "Id", "Descripcion");
+                SessionClose();
+                
                 return View(res);
             }
         }

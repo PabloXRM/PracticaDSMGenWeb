@@ -1,0 +1,59 @@
+@model DSM.Models.EstanteriaViewModel
+@using DSM.Models
+
+@{
+    ViewData["Title"] = "Añadir a Estantería";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var producto = ViewBag.Producto as ProductoViewModel;
+}
+
+<div class="profile-page">
+    <div class="profile-card" style="max-width: 500px;">
+        <div class="profile-header">
+            <div>
+                <h1 class="profile-title">Añadir a Estantería</h1>
+                <p class="profile-subtitle">Selecciona dónde quieres guardar este disco.</p>
+            </div>
+        </div>
+
+        <div class="profile-divider"></div>
+
+        <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 24px; background: rgba(0,0,0,0.03); padding: 12px; border-radius: 12px;">
+            @{
+                string imagenPath = Url.Content("~/img/cd1.png");
+                if (producto != null && !string.IsNullOrEmpty(producto.Fotos))
+                {
+                    if (!producto.Fotos.StartsWith("http") && !producto.Fotos.StartsWith("/"))
+                    {
+                        imagenPath = Url.Content("~/img/" + producto.Fotos);
+                    }
+                    else
+                    {
+                        imagenPath = producto.Fotos;
+                    }
+                }
+            }
+            <img src="@imagenPath" alt="@producto?.Descripcion" style="width: 60px; height: 60px; object-fit: contain; background: #fff; border-radius: 8px;" />
+            <div>
+                <h4 style="margin: 0 0 4px 0;">@producto?.Descripcion</h4>
+                <p style="margin: 0; color: var(--color-muted); font-size: 0.9rem;">@producto?.Artista</p>
+            </div>
+        </div>
+
+        <form asp-action="AddProducto" method="post">
+            <input type="hidden" name="idProducto" value="@producto?.Id" />
+
+            <div class="form-field">
+                <label for="idEstanteria" class="form-label">Selecciona una estantería</label>
+                <select name="idEstanteria" id="idEstanteria" class="form-select" asp-items="ViewBag.Estanterias" required>
+                    <option value="">-- Elige una opción --</option>
+                </select>
+            </div>
+
+            <div class="profile-actions" style="margin-top: 20px;">
+                <button type="submit" class="btn primary-btn">Guardar en Estantería</button>
+                <a href="javascript:history.back()" class="btn ghost-btn">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

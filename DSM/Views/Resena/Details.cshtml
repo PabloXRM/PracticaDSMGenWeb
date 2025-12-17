@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Http
 @model DSM.Models.ResenaViewModel
 
 @{
@@ -44,7 +45,14 @@
         </div>
 
         <div class="form-actions" style="margin-top:16px;">
-            <a class="btn ghost-btn" asp-action="Producto" asp-route-productoId="@Model.ProductoId">Volver</a>
+            @if (Context.Session.GetString("IsAdmin") == "true")
+            {
+                <a class="btn ghost-btn" asp-action="Index">Volver</a>
+            }
+            else
+            {
+                <a class="btn ghost-btn" asp-action="Producto" asp-route-productoId="@Model.ProductoId">Volver</a>
+            }
         </div>
     </div>
 </section>

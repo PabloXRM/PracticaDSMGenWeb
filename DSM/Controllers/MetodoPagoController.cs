@@ -13,10 +13,10 @@ using DSM.Filters;
 
 namespace DSM.Controllers
 {
-    [AdminOnly]
     public class MetodoPagoController : BasicController
     {
         // GET: MetodoPagoController
+        [AdminOnly]
         public ActionResult Index()
         {
             SessionInitialize();
@@ -34,6 +34,7 @@ namespace DSM.Controllers
         }
 
         // GET: MetodoPagoController/Details/5
+        [AdminOnly]
         public ActionResult Details(int id)
         {
             SessionInitialize();
@@ -48,6 +49,7 @@ namespace DSM.Controllers
         }
 
         // GET: MetodoPagoController/Create
+        [AdminOnly]
         public ActionResult Create()
         {
             return View();
@@ -56,29 +58,27 @@ namespace DSM.Controllers
         // POST: MetodoPagoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AdminOnly]
         public ActionResult Create(MetodoPagoViewModel met)
         {
             if (!ModelState.IsValid)
             {
-                // Hay errores de validación → volvemos a la vista mostrando mensajes
                 return View(met);
             }
 
             try
             {
+                // Obtener usuario actual de la sesión
+                var usuario = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+                string emailAdmin = usuario != null ? usuario.email : "admin@gmail.com"; // Fallback seguro
+
                 MetodoPagoRepository metRepo = new MetodoPagoRepository();
                 MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
 
-                /* Valores por defecto para los campos que no se piden en el formulario
-                var valoracionPorDefecto = "0/10";
-                var visitasPorDefecto = 0;
-                var visibilidadPorDefecto = true;
-                */
-
-                //No quiero introducir valoracion, visitas y visibilidad, quiero que sea default
+                // Los administradores deben proporcionar el tipo de pago
                 metCEN.New_(
-                   "prueba@gmail.com",  //Recuperar email de un usuario??
-                   met.TipoPago, //Me lo crea en 0 por defecto
+                   emailAdmin,
+                   met.TipoPago,
                    met.Valido
                 );
 
@@ -86,13 +86,13 @@ namespace DSM.Controllers
             }
             catch (Exception ex)
             {
-                // Mostrar el error en la propia página
-                ModelState.AddModelError(string.Empty, ex.Message);
+                ModelState.AddModelError(string.Empty, "Error: " + ex.Message);
                 return View(met);
             }
         }
 
         // GET: MetodoPagoController/Edit/5
+        [AdminOnly]
         public ActionResult Edit(int id)
         {
             SessionInitialize();
@@ -109,6 +109,7 @@ namespace DSM.Controllers
         // POST: MetodoPagoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AdminOnly]
         public ActionResult Edit(MetodoPagoViewModel met)
         {
             if (!ModelState.IsValid)
@@ -138,12 +139,12 @@ namespace DSM.Controllers
         }
 
         // GET: MetodoPagoController/Delete/5
+        [AdminOnly]
         public ActionResult Delete(int id)
         {
             MetodoPagoRepository metRepo = new MetodoPagoRepository();
             MetodoPagoCEN metCEN = new MetodoPagoCEN(metRepo);
             metCEN.Destroy(id);
-
 
             return RedirectToAction(nameof(Index));
         }
@@ -151,6 +152,7 @@ namespace DSM.Controllers
         // POST: MetodoPagoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AdminOnly]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

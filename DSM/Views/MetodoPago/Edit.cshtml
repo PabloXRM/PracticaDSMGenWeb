@@ -1,39 +1,43 @@
 ﻿@model DSM.Models.MetodoPagoViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Método de pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Editar el Método de pago</h1>
+<div class="form-page">
+    <div class="form-card">
+        <h1 class="form-title">Editar Método de pago</h1>
+        <p class="form-subtitle">Modifica los detalles del método de pago.</p>
 
-<h4>Método de pago</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TipoPago" class="control-label"></label>
-                <input asp-for="TipoPago" class="form-control" />
-                <span asp-validation-for="TipoPago" class="text-danger"></span>
+        <form asp-action="Edit" method="post" class="form-layout">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="form-error"></div>
+
+            <div class="form-field">
+                <label asp-for="TipoPago"></label>
+                <input asp-for="TipoPago" class="form-input" />
+                <span asp-validation-for="TipoPago" class="form-error"></span>
             </div>
-            <div class="form-group form-check">
+
+            <div class="form-field">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Valido" /> @Html.DisplayNameFor(model => model.Valido)
+                    <input class="form-check-input" asp-for="Valido" />
+                    @Html.DisplayNameFor(model => model.Valido)
                 </label>
+                <span asp-validation-for="Valido" class="form-error"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-actions">
+                <button class="btn primary-btn" type="submit">Guardar</button>
+                <a class="btn ghost-btn" asp-action="Index">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

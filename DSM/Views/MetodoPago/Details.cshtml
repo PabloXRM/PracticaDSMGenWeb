@@ -1,31 +1,28 @@
 ﻿@model DSM.Models.MetodoPagoViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del método de pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalles del método de pago</h1>
+<section class="section">
+    <div class="section-header section-header-row">
+        <div>
+            <div class="section-kicker">Método de pago</div>
+            <h2>DETALLES</h2>
+        </div>
+        <a class="btn ghost-btn" asp-action="Index">Volver a la lista</a>
+    </div>
 
-<div>
-    <h4>Metodo de Pago</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoPago)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoPago)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Valido)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Valido)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="detail-card">
+        <div class="detail-list">
+            <div class="detail-row">
+                <div class="detail-label">Tipo de pago</div>
+                <div class="detail-value">@Model.TipoPago</div>
+            </div>
+
+        <div class="form-actions" style="margin-top:16px;">
+            <a class="btn primary-btn" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+        </div>
+    </div>
+</section>

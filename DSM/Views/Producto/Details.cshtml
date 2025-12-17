@@ -1,65 +1,75 @@
 ﻿@model DSM.Models.ProductoViewModel
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Producto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var fallback = Url.Content("~/img/cd1.png");
+    var foto = fallback;
+
+    var raw = Model?.Fotos?.Trim();
+    if (!string.IsNullOrWhiteSpace(raw))
+    {
+        raw = raw.Split(';', ',')[0].Trim().Trim('\"', '\'');
+        if (raw.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || raw.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            foto = raw;
+        else if (raw.StartsWith("~/") || raw.StartsWith("/"))
+            foto = Url.Content(raw.StartsWith("~/") ? raw : ("~" + raw));
+        else if (raw.StartsWith("img/", StringComparison.OrdinalIgnoreCase) || raw.StartsWith("images/", StringComparison.OrdinalIgnoreCase))
+            foto = Url.Content("~/" + raw.TrimStart('/'));
+        else if (!(raw.Contains(@"\") || raw.Contains(":")))
+            foto = Url.Content("~/img/" + raw.TrimStart('/'));
+    }
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>ProductoViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Formato)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Formato)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estilo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estilo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Artista)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Artista)
-        </dd>
-        @if (Model != null && Model.Fotos != null)
-        {
-            <dd class="col-sm-10">
-                <img src="@Html.DisplayFor(model => model.Fotos)" height="150" width="150" />
-
-            </dd>
-        }
-    </dl>
-</div>
-@if (Model != null)
-{
-    <div>
-        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
-        <a asp-action="Index">Volver a la lista</a>
+<section class="section">
+    <div class="section-header section-header-row">
+        <div>
+            <div class="section-kicker">Producto</div>
+            <h2>DETALLES</h2>
+        </div>
+        <a class="btn ghost-btn" asp-action="Index">Volver</a>
     </div>
-}
+
+    <div class="product-detail-card">
+        <div class="product-detail-media">
+            <img src="@foto" alt="@(Model?.Descripcion ?? "Producto")"
+                 onerror="this.onerror=null;this.src='@fallback';" loading="lazy" />
+        </div>
+
+        <div class="product-detail-content">
+            <h1 class="product-detail-title">@Model.Descripcion</h1>
+
+            <div class="product-detail-badges">
+                <span class="badge">@Model.Formato</span>
+                <span class="badge">@Model.Estilo</span>
+            </div>
+
+            <div class="product-detail-price-row">
+                <span class="product-detail-price">@String.Format("{0:0.00} €", Model.Precio)</span>
+                <span class="product-detail-stock @(Model.Stock > 0 ? "in" : "out")">
+                    @(Model.Stock > 0 ? $"Stock: {Model.Stock}" : "Agotado")
+                </span>
+            </div>
+
+            <dl class="product-detail-list">
+                <div>
+                    <dt>Artista</dt>
+                    <dd>@Model.Artista</dd>
+                </div>
+                <div>
+                    <dt>Formato</dt>
+                    <dd>@Model.Formato</dd>
+                </div>
+                <div>
+                    <dt>Estilo</dt>
+                    <dd>@Model.Estilo</dd>
+                </div>
+            </dl>
+
+            <div class="product-detail-actions">
+                <a class="btn primary-btn" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+                <a class="btn ghost-btn" asp-action="Index">Volver a la lista</a>
+            </div>
+        </div>
+    </div>
+</section>

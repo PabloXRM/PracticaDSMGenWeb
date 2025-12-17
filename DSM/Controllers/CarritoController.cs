@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PracticaDSMGen.ApplicationCore.CEN.PracticaDSM;
 using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM;
+using PracticaDSMGen.ApplicationCore.CP.PracticaDSM;
 using PracticaDSMGen.Infraestructure.Repository.PracticaDSM;
+using PracticaDSMGen.Infraestructure.CP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,17 @@ namespace DSM.Controllers
         // POST: /Carrito/Add
         [HttpPost]
         public ActionResult Add(int id)
+        {
+            var cart = HttpContext.Session.Get<Dictionary<int, int>>("cart") ?? new Dictionary<int, int>();
+            cart[id] = cart.ContainsKey(id) ? cart[id] + 1 : 1;
+            HttpContext.Session.Set("cart", cart);
+
+            return RedirectToAction("Index");
+        }
+
+        // GET: /Carrito/AñadirAlCarrito (para enlaces desde vista)
+        [HttpGet]
+        public ActionResult AñadirAlCarrito(int id)
         {
             var cart = HttpContext.Session.Get<Dictionary<int, int>>("cart") ?? new Dictionary<int, int>();
             cart[id] = cart.ContainsKey(id) ? cart[id] + 1 : 1;
@@ -84,7 +97,7 @@ namespace DSM.Controllers
             SessionInitialize();
             var mpRepo = new MetodoPagoRepository(session);
             var mpCEN = new MetodoPagoCEN(mpRepo);
-            var metodos = mpCEN.ReadAll(0, -1);
+            var metodos = mpCEN.ReadAll(0, -1).Where(m => m.Valido).ToList();
             SessionClose();
 
             ViewBag.MetodosPago = new SelectList(metodos, "Id", "Tipo");
@@ -127,7 +140,44 @@ namespace DSM.Controllers
                 var numero = "PED-" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 var fecha = DateTime.Now;
 
-                pedidoCEN.New_(u.email, metodoPagoId, CarritoEnum.conArticulos, numero, fecha, total);
+                // Inicializar pedido con precio 0, ya que LineaPedidoCP sumará el precio de las líneas
+                int idPedido = pedidoCEN.New_(u.email, metodoPagoId, CarritoEnum.conArticulos, numero, fecha, 0);
+
+                // Crear líneas de pedido para cada producto en el carrito
+                SessionInitialize();
+                var lineaPedidoCP = new PracticaDSMGen.ApplicationCore.CP.PracticaDSM.LineaPedidoCP(
+                    new PracticaDSMGen.Infraestructure.CP.SessionCPNHibernate());
+                
+                int lineNumber = 1;
+                foreach (var kv in cart)
+                {
+                    var prod = productos.FirstOrDefault(p => p.Id == kv.Key);
+                    if (prod != null)
+                    {
+                        // Usar decimal para precio, no castear a int
+                        decimal precioLinea = prod.Precio * kv.Value;
+                        // New_ signature: (int p_pedido, int p_cantidad, int p_producto, decimal p_precio)
+                        // p_precio is total price of the line
+                        lineaPedidoCP.New_(idPedido, kv.Value, kv.Key, precioLinea);
+                        lineNumber++;
+                    }
+                }
+                SessionClose();
+
+                // Enviar el pedido para decrementar stock
+                var pedidoCP = new PracticaDSMGen.ApplicationCore.CP.PracticaDSM.PedidoCP(
+                    new PracticaDSMGen.Infraestructure.CP.SessionCPNHibernate());
+                pedidoCP.EnviarPedido(idPedido);
+
+                // Crear factura automáticamente
+                SessionInitialize();
+                var facturaRepo = new FacturaRepository(session);
+                var facturaCEN = new FacturaCEN(facturaRepo);
+                
+                string numeroFactura = "FAC-" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                facturaCEN.New_(idPedido, numeroFactura, total, DateTime.Now);
+                
+                SessionClose();
 
                 HttpContext.Session.Remove("cart");
                 return RedirectToAction("Index", "Pedido");
@@ -140,13 +190,35 @@ namespace DSM.Controllers
                 SessionInitialize();
                 var mpRepo = new MetodoPagoRepository(session);
                 var mpCEN = new MetodoPagoCEN(mpRepo);
-                var metodos = mpCEN.ReadAll(0, -1);
+                var metodos = mpCEN.ReadAll(0, -1).Where(m => m.Valido).ToList();
                 SessionClose();
                 ViewBag.MetodosPago = new SelectList(metodos, "Id", "Tipo");
 
                 return View();
             }
         }
+
+        // POST: /Carrito/UpdateCantidad
+        [HttpPost]
+        public ActionResult UpdateCantidad(int id, int cantidad)
+        {
+            var cart = HttpContext.Session.Get<Dictionary<int, int>>("cart") ?? new Dictionary<int, int>();
+            
+            if (cantidad <= 0)
+            {
+                // Si cantidad es 0 o negativa, quitar el producto
+                cart.Remove(id);
+            }
+            else
+            {
+                cart[id] = cantidad;
+            }
+            
+            HttpContext.Session.Set("cart", cart);
+            return RedirectToAction("Index");
+        }
+
+        // GET: /Carrito
     }
 
     public class CarritoItemViewModel

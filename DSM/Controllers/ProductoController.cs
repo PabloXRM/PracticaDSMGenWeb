@@ -70,6 +70,13 @@ namespace DSM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAsync(ProductoViewModel art)
         {
+            // Validar que se ha proporcionado un archivo
+            if (art.Fichero == null || art.Fichero.Length == 0)
+            {
+                ModelState.AddModelError(nameof(art.Fichero), "Debe seleccionar una imagen para el producto");
+                return View(art);
+            }
+
             string fileName = "", path = "";
             if (art.Fichero != null && art.Fichero.Length > 0)
             {
