@@ -2016,6 +2016,151 @@ body {
         transform: translateY(-2px);
         box-shadow: 0 18px 44px rgba(0,0,0,.10);
     }
+/* -------------------- */
+/*   PRODUCT DETAILS    */
+/* -------------------- */
+
+.product-detail-card {
+    background: var(--color-card);
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.06);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+}
+
+.product-detail-media {
+    background: rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+}
+
+    .product-detail-media img {
+        width: 100%;
+        max-width: 320px;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: var(--shadow-soft);
+    }
+
+.product-detail-content {
+    padding: 22px;
+}
+
+.product-detail-title {
+    margin: 0 0 10px;
+    font-size: 1.6rem;
+    letter-spacing: 0.01em;
+}
+
+.product-detail-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 6px 0 14px;
+}
+
+/* Si ya tienes .badge en global, esto solo la “afina” */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 0.78rem;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+
+.product-detail-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 10px 0 16px;
+}
+
+.product-detail-price {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.product-detail-stock {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(0,0,0,0.03);
+}
+
+    .product-detail-stock.in {
+        background: rgba(46,204,113,0.16);
+        color: #1b7a3a;
+        border-color: rgba(46,204,113,0.25);
+    }
+
+    .product-detail-stock.out {
+        background: rgba(224,49,49,0.14);
+        color: #b42323;
+        border-color: rgba(224,49,49,0.22);
+    }
+
+.product-detail-list {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+    .product-detail-list > div {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .product-detail-list dt {
+        color: var(--color-muted);
+        font-size: .78rem;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+    }
+
+    .product-detail-list dd {
+        margin: 0;
+        color: var(--color-text);
+    }
+
+.product-detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+    .product-detail-card {
+        grid-template-columns: 1fr;
+    }
+
+    .product-detail-media {
+        padding: 18px;
+    }
+
+    .product-detail-list > div {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* ====== BLOQUES TIPO E-COMMERCE (si los usas en Home) ====== */
 
@@ -2236,6 +2381,70 @@ body {
         font-size: 1.2rem;
     }
 }
+
+/* -------------------- */
+/*   ESTANTERIA DETAILS */
+/* -------------------- */
+
+.detail-card {
+    background: var(--color-card);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 22px;
+    margin-top: 20px;
+}
+
+.detail-list {
+    display: grid;
+    gap: 12px;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+    .form-actions .btn {
+        padding: 8px 16px;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .detail-list {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* ====== GRID PARA MÚLTIPLES RECOMENDACIONES ====== */
 

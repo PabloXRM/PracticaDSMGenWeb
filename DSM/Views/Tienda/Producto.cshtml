@@ -36,22 +36,27 @@
                     <span class="product-stock">@((p.Stock > 0) ? "En stock" : "Agotado")</span>
                 </div>
 
-                <div class="product-actions">
-                    <form asp-controller="Carrito" asp-action="Add" method="post" style="flex: 1;">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@p.Id" />
-                        <button class="btn primary-btn" type="submit" style="width: 100%;" @(p.Stock <= 0 ? "disabled" : "")>
-                            Añadir carrito
-                        </button>
-                    </form>
+                @if (!Model.EsAdmin)
+                {
+                    <div class="product-actions">
+                        <form asp-controller="Carrito" asp-action="Add" method="post" style="flex: 1;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <button class="btn primary-btn" type="submit" style="width: 100%;" @(p.Stock <= 0 ? "disabled" : "")>
+                                Añadir carrito
+                            </button>
+                        </form>
 
-                    <a asp-controller="Estanteria" asp-action="AddProducto" asp-route-idProducto="@p.Id" class="btn secondary-btn" style="flex: 1;">
-                        ❤️ Añadir a estantería
-                    </a>
+                        <a asp-controller="Estanteria" asp-action="AddProducto" asp-route-idProducto="@p.Id"
+                           class="btn secondary-btn" style="flex: 1;">
+                            ❤️ Añadir a estantería
+                        </a>
 
-                    <a asp-controller="Carrito" asp-action="Index" class="btn ghost-btn" style="flex: 1;">Ver carrito</a>
-                    <a asp-controller="Tienda" asp-action="Catalogo" class="btn ghost-btn" style="flex: 1;">Volver</a>
-                </div>
+                        <a asp-controller="Carrito" asp-action="Index" class="btn ghost-btn" style="flex: 1;">Ver carrito</a>
+                        <a asp-controller="Tienda" asp-action="Catalogo" class="btn ghost-btn" style="flex: 1;">Volver</a>
+                    </div>
+                }
+
 
                 <div class="profile-divider"></div>
 

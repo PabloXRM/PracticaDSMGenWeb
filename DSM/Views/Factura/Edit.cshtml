@@ -1,44 +1,47 @@
 ﻿@model DSM.Models.FacturaViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Factura";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Editar Factura</h1>
+<div class="form-page">
+    <div class="form-card">
+        <h1 class="form-title">Editar Factura</h1>
+        <p class="form-subtitle">Modifica los detalles de la factura.</p>
 
-<h4>Factura</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" />
-                <span asp-validation-for="Numero" class="text-danger"></span>
+        <form asp-action="Edit" method="post" class="form-layout">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="form-error"></div>
+
+            <div class="form-field">
+                <label asp-for="Numero"></label>
+                <input asp-for="Numero" class="form-input" />
+                <span asp-validation-for="Numero" class="form-error"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImporteTotal" class="control-label"></label>
-                <input asp-for="ImporteTotal" class="form-control" />
-                <span asp-validation-for="ImporteTotal" class="text-danger"></span>
+
+            <div class="form-field">
+                <label asp-for="ImporteTotal"></label>
+                <input asp-for="ImporteTotal" class="form-input" />
+                <span asp-validation-for="ImporteTotal" class="form-error"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
+
+            <div class="form-field">
+                <label asp-for="Fecha"></label>
+                <input asp-for="Fecha" class="form-input" />
+                <span asp-validation-for="Fecha" class="form-error"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-actions">
+                <button class="btn primary-btn" type="submit">Guardar</button>
+                <a class="btn ghost-btn" asp-action="Index">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
