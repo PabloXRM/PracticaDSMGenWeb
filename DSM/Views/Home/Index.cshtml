@@ -55,7 +55,7 @@
 {
     <section class="section section-recommendation">
         <div class="section-header">
-            <h2>✨ Recomendaciones especiales</h2>
+            <h2>Recomendaciones especiales</h2>
         </div>
 
         <div class="cards-row-recommendations">
@@ -63,20 +63,36 @@
             {
                 <article class="disc-card featured">
                     @{
-                        string imagenPath = Url.Content("~/img/cd1.png");
-                        if (!string.IsNullOrEmpty(producto.Fotos))
+                        var placeholder = Url.Content("~/img/cd3.png");
+                        var fotoRaw = producto.Fotos;
+
+                        string imagenPath = placeholder;
+
+                        if (!string.IsNullOrWhiteSpace(fotoRaw))
                         {
-                            if (!producto.Fotos.StartsWith("http") && !producto.Fotos.StartsWith("/"))
+                            var f = fotoRaw.Trim().Replace("\\", "/");
+
+                            // Si es URL absoluta
+                            if (f.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                             {
-                                imagenPath = Url.Content("~/img/" + producto.Fotos);
+                                imagenPath = f;
                             }
                             else
                             {
-                                imagenPath = producto.Fotos;
+                                // Normalizar: quitar / inicial y "img/" si ya viene incluido
+                                f = f.TrimStart('/');
+                                if (f.StartsWith("img/", StringComparison.OrdinalIgnoreCase))
+                                    f = f.Substring(4);
+
+                                imagenPath = Url.Content("~/img/" + f);
                             }
                         }
                     }
-                    <img src="@imagenPath" alt="@producto.Descripcion" />
+
+                    <img src="@imagenPath"
+                         alt="@producto.Descripcion"
+                         onerror="this.onerror=null; this.src='@placeholder';" />
+
                     <div class="card-info">
                         <h3>@producto.Descripcion</h3>
                         <p class="artist">@producto.Artista</p>
@@ -99,28 +115,29 @@
 
 <section class="section section-reserve">
     <div class="section-header">
-        <h2>Reserva el último disco de Xxxxx</h2>
+        <h2>Reserva el último disco <strong>LUX</strong></h2>
     </div>
 
-    <div class="cards-row">
-        <article class="disc-card">
-            <img src="~/img/cd1.png" alt="Disco 1" />
-        </article>
-        <article class="disc-card">
-            <img src="~/img/cd1.png" alt="Disco 2" />
-        </article>
-        <article class="disc-card">
-            <img src="~/img/cd1.png" alt="Disco 3" />
-        </article>
-        <article class="disc-card">
-            <img src="~/img/cd1.png" alt="Disco 4" />
-        </article>
-    </div>
+    <div class="reserve-collage">
+        <div class="reserve-left">
+            <div class="reserve-img small">
+                <img src="~/img/cd1.png" alt="Disco portada" />
+            </div>
+            <div class="reserve-img small">
+                <img src="~/img/ros1.jpg" alt="Detalle disco" />
+            </div>
+        </div>
 
-    <div class="section-cta">
-        <a class="btn primary-btn" asp-controller="Tienda" asp-action="Catalogo">Descubre más</a>
+        <a class="reserve-right" asp-controller="Tienda" asp-action="Catalogo">
+            <img src="~/img/ros2.jpg" alt="Reserva disco" />
+            <div class="reserve-overlay">
+                <span>Reservar ahora</span>
+            </div>
+        </a>
     </div>
 </section>
+
+
 
 <section class="section section-offers">
     <div class="section-header section-header-row">
@@ -128,39 +145,157 @@
         <a class="btn ghost-btn" asp-controller="Tienda" asp-action="Catalogo">Ver todo</a>
     </div>
 
-    <div class="cards-row small">
-        <article class="disc-card">
-            <img src="~/img/cd6.png" alt="Oferta 1" />
+    <div class="offers-grid">
+        <!-- OFERTA 1 -->
+        <article class="offer-card">
+            <div class="offer-media">
+                <span class="offer-badge">-30%</span>
+                <img src="~/img/cold1.webp" alt="Oferta 1" />
+            </div>
+
+            <div class="offer-body">
+                <h3 class="offer-title">Vinilo “Moon Music”</h3>
+                <p class="offer-sub">Edición limitada · LP</p>
+
+                <div class="offer-price">
+                    <span class="offer-old">29,99 €</span>
+                    <span class="offer-new">20,99 €</span>
+                </div>
+
+                <div class="offer-actions">
+                    <a class="btn ghost-btn btn-sm" asp-controller="Tienda" asp-action="Catalogo">Ver</a>
+                    <a class="btn primary-btn btn-sm" asp-controller="Carrito" asp-action="Index">Añadir</a>
+                </div>
+            </div>
         </article>
-        <article class="disc-card">
-            <img src="~/img/cd6.png" alt="Oferta 2" />
+
+        <!-- OFERTA 2 -->
+        <article class="offer-card">
+            <div class="offer-media">
+                <span class="offer-badge">-40%</span>
+                <img src="~/img/cold2.webp" alt="Oferta 2" />
+            </div>
+
+            <div class="offer-body">
+                <h3 class="offer-title">Vinilo “X&Y”</h3>
+                <p class="offer-sub">Nuevo stock · 2xLP</p>
+
+                <div class="offer-price">
+                    <span class="offer-old">34,99 €</span>
+                    <span class="offer-new">20,99 €</span>
+                </div>
+
+                <div class="offer-actions">
+                    <a class="btn ghost-btn btn-sm" asp-controller="Tienda" asp-action="Catalogo">Ver</a>
+                    <a class="btn primary-btn btn-sm" asp-controller="Carrito" asp-action="Index">Añadir</a>
+                </div>
+            </div>
         </article>
-        <article class="disc-card">
-            <img src="~/img/cd6.png" alt="Oferta 3" />
+
+        <!-- OFERTA 3 -->
+        <article class="offer-card">
+            <div class="offer-media">
+                <span class="offer-badge">-25%</span>
+                <img src="~/img/cold3.webp" alt="Oferta 3" />
+            </div>
+
+            <div class="offer-body">
+                <h3 class="offer-title">Vinilo “Parachutes”</h3>
+                <p class="offer-sub">Top ventas · LP</p>
+
+                <div class="offer-price">
+                    <span class="offer-old">23,99 €</span>
+                    <span class="offer-new">17,99 €</span>
+                </div>
+
+                <div class="offer-actions">
+                    <a class="btn ghost-btn btn-sm" asp-controller="Tienda" asp-action="Catalogo">Ver</a>
+                    <a class="btn primary-btn btn-sm" asp-controller="Carrito" asp-action="Index">Añadir</a>
+                </div>
+            </div>
         </article>
     </div>
 </section>
 
-<section class="section section-novedades">
+
+<section class="section section-novedades section-70s">
     <div class="section-inner">
         <div class="section-header section-header-row">
-            <h2>Novedades</h2>
+            <div>
+                <h2>Novedades 70s</h2>
+                <div class="section-subline">Sonido clásico · Eagles en vinilo</div>
+            </div>
+
             <a class="btn ghost-btn" asp-controller="Tienda" asp-action="Catalogo">Ver todo</a>
         </div>
 
-        <div class="cards-row">
-            <article class="disc-card">
-                <img src="~/img/cd8.png" alt="Novedad 1" />
+        <div class="new70-grid">
+            <!-- Eagles 1 -->
+            <article class="new70-card">
+                <div class="new70-media">
+                    <img src="~/img/eagle.jpeg" alt="Eagles - Vinilo 1" />
+                </div>
+
+                <div class="new70-info">
+                    <h3 class="new70-title">Eagles · The Classic Era</h3>
+                    <p class="new70-artist">Eagles</p>
+
+                    <div class="new70-bottom">
+                        <span class="new70-price">27,99 €</span>
+
+                        <a class="btn primary-btn btn-sm"
+                           asp-controller="Carrito" asp-action="AñadirAlCarrito"
+                           asp-route-id="101">
+                            Añadir al carrito
+                        </a>
+                    </div>
+                </div>
             </article>
-            <article class="disc-card">
-                <img src="~/img/cd9.png" alt="Novedad 2" />
+
+            <!-- Eagles 2 -->
+            <article class="new70-card">
+                <div class="new70-media">
+                    <img src="~/img/eagle2.jpg" alt="Eagles - Vinilo 2" />
+                </div>
+
+                <div class="new70-info">
+                    <h3 class="new70-title">Eagles · West Coast Nights</h3>
+                    <p class="new70-artist">Eagles</p>
+
+                    <div class="new70-bottom">
+                        <span class="new70-price">29,99 €</span>
+
+                        <a class="btn primary-btn btn-sm"
+                           asp-controller="Carrito" asp-action="AñadirAlCarrito"
+                           asp-route-id="102">
+                            Añadir al carrito
+                        </a>
+                    </div>
+                </div>
             </article>
-            <article class="disc-card">
-                <img src="~/img/cd10.png" alt="Novedad 3" />
-            </article>
-            <article class="disc-card">
-                <img src="~/img/cd11.png" alt="Novedad 4" />
+
+            <!-- Eagles 3 -->
+            <article class="new70-card">
+                <div class="new70-media">
+                    <img src="~/img/eagle3.jpg" alt="Eagles - Vinilo 3" />
+                </div>
+
+                <div class="new70-info">
+                    <h3 class="new70-title">Eagles · Golden Vinyl</h3>
+                    <p class="new70-artist">Eagles</p>
+
+                    <div class="new70-bottom">
+                        <span class="new70-price">25,99 €</span>
+
+                        <a class="btn primary-btn btn-sm"
+                           asp-controller="Carrito" asp-action="AñadirAlCarrito"
+                           asp-route-id="103">
+                            Añadir al carrito
+                        </a>
+                    </div>
+                </div>
             </article>
         </div>
     </div>
 </section>
+
