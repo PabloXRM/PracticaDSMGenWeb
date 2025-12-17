@@ -1,6 +1,7 @@
 ﻿using DSM.Models;
 using PracticaDSMGen.ApplicationCore.EN.PracticaDSM;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DSM.Assemblers
 {
@@ -14,6 +15,15 @@ namespace DSM.Assemblers
             est.Valoracion = en.Valoracion;
             est.Visitas = en.Visitas;
             est.Visible = en.Visible;
+
+            // Mapear productos si existen
+            if (en.Producto != null && en.Producto.Count > 0)
+            {
+                var productoAssembler = new ProductoAssembler();
+                est.Productos = en.Producto
+                    .Select(p => productoAssembler.ConvertENToModelUI(p))
+                    .ToList();
+            }
 
             return est;
         }

@@ -1,47 +1,36 @@
 ﻿@model DSM.Models.EstanteriaViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Estantería Virtual";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Crear nueva Estantería</h1>
+<div class="profile-page">
+    <div class="profile-card" style="max-width: 500px;">
+        <div class="profile-header">
+            <div>
+                <h1 class="profile-title">Crear Estantería Virtual</h1>
+                <p class="profile-subtitle">Dale un nombre a tu nueva estantería personal.</p>
+            </div>
+        </div>
 
-<h4>Estanteria Virtual</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
+        <div class="profile-divider"></div>
+
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="form-validation-summary"></div>
+
+            <div class="form-field">
+                <label asp-for="Descripcion" class="form-label">Nombre de la Estantería</label>
+                <input asp-for="Descripcion" class="form-input" placeholder="Ej: Mi colección de Rock" required />
+                <span asp-validation-for="Descripcion" class="form-error"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Valoracion" class="control-label"></label>
-                <input asp-for="Valoracion" class="form-control" />
-                <span asp-validation-for="Valoracion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Visitas" class="control-label"></label>
-                <input asp-for="Visitas" class="form-control" />
-                <span asp-validation-for="Visitas" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Visible" /> @Html.DisplayNameFor(model => model.Visible)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="profile-actions" style="margin-top: 20px;">
+                <button type="submit" class="btn primary-btn">Crear Estantería</button>
+                <a asp-controller="Usuario" asp-action="EstanteriaVirtual" class="btn ghost-btn">Cancelar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

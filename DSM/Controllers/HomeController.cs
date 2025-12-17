@@ -25,8 +25,35 @@ namespace DSM.Controllers
         // Portada (sin resultados)
         public IActionResult Index()
         {
-            // Solo devuelve el modelo con filtros vacíos
-            return View(new HomeIndexViewModel());
+            var vm = new HomeIndexViewModel();
+
+            try
+            {
+                var productoCEN = new ProductoCEN(new ProductoRepository());
+                IList<ProductoEN> todosProductos = productoCEN.ReadAll(0, 999999);
+
+                if (todosProductos != null && todosProductos.Count > 0)
+                {
+                    // Seleccionar dos productos aleatorios como recomendaciones
+                    var random = new Random();
+                    var productosAleatorios = todosProductos
+                        .OrderBy(x => random.Next())
+                        .Take(2)
+                        .ToList();
+
+                    vm.ProductosRecomendados = new List<ProductoViewModel>();
+                    foreach (var prod in productosAleatorios)
+                    {
+                        vm.ProductosRecomendados.Add(new ProductoAssembler().ConvertENToModelUI(prod));
+                    }
+                }
+            }
+            catch
+            {
+                // Si hay error al cargar recomendaciones, continuar sin ellas
+            }
+
+            return View(vm);
         }
 
         // Página nueva: resultados del buscador

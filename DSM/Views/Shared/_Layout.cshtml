@@ -33,7 +33,7 @@
                     <img src="~/img/logo.png" alt="TempoShop" class="logo" />
                 </a>
 
-                <nav class="navbar navbar-expand-sm navbar-light bg-white">
+                <nav class="navbar navbar-expand-sm navbar-light bg-white @(esAdmin ? "navbar-admin" : "")">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -41,16 +41,15 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="main-menu navbar-nav flex-grow-1">
 
-                            <!-- Común -->
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
-                            </li>
-
                             @if (u != null)
                             {
                                 if (esAdmin)
                                 {
-                                    <!-- ===== MENÚ ADMIN (Backoffice) ===== -->
+                                    <!-- Admin header: emphasize Backoffice and show only admin options -->
+                                    <li class="nav-item">
+                                        <span class="nav-link" style="font-weight:700;color:var(--color-primary);">BACKOFFICE</span>
+                                    </li>
+
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="Producto" asp-action="Index">Productos</a>
                                     </li>
@@ -69,6 +68,14 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="MetodoPago" asp-action="Index">Métodos de pago</a>
                                     </li>
+
+                                    <!-- Mantener acceso a perfil y logout -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Usuario" asp-action="Perfil">Perfil</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Usuario" asp-action="Logout">Salir</a>
+                                    </li>
                                 }
                                 else
                                 {
@@ -82,15 +89,15 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="Pedido" asp-action="Index">Mis pedidos</a>
                                     </li>
-                                }
 
-                                <!-- Común logueado -->
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Usuario" asp-action="Perfil">Perfil</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Usuario" asp-action="Logout">Salir</a>
-                                </li>
+                                    <!-- Común logueado -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Usuario" asp-action="Perfil">Perfil</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Usuario" asp-action="Logout">Salir</a>
+                                    </li>
+                                }
                             }
                             else
                             {
@@ -127,6 +134,7 @@
         </div>
     </footer>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

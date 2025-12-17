@@ -18,5 +18,8 @@ namespace DSM.Models
 
         [ScaffoldColumn(false)]
         public int IdPedido { get; set; }
+
+        // Producto asociado (se mapeará desde la entidad EN)
+        public ProductoViewModel Producto { get; set; }
     }
 }

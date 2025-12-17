@@ -54,6 +54,15 @@
             </div>
         </div>
 
+        <!-- Sección Estantería Virtual -->
+        <div class="profile-divider"></div>
+
+        <div class="profile-section-estanteria">
+            <h2 style="margin: 0 0 12px 0; font-size: 1.2rem; font-weight: 700;">📚 Mi Estantería Virtual</h2>
+            <p style="margin: 0 0 16px 0; color: var(--color-muted);">Organiza tus discos y vinilos favoritos en una estantería personal.</p>
+            <a class="btn primary-btn" asp-controller="Usuario" asp-action="EstanteriaVirtual">Ver mi estantería</a>
+        </div>
+
         <div class="profile-actions">
             <a class="btn primary-btn" asp-controller="Usuario" asp-action="EditPerfil">Editar perfil</a>
             <a class="btn ghost-btn" asp-controller="Home" asp-action="Index">Volver</a>
@@ -63,3 +72,17 @@
 
     </div>
 </div>
+
+<style>
+    .profile-section-estanteria {
+        background: linear-gradient(135deg, rgba(245,212,192,0.3) 0%, rgba(255,255,255,0) 100%);
+        border: 1px solid rgba(217,137,91,0.2);
+        border-radius: 16px;
+        padding: 18px;
+        margin: 20px 0;
+    }
+
+    .profile-section-estanteria .btn {
+        margin-top: 12px;
+    }
+</style>

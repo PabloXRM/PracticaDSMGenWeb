@@ -590,17 +590,50 @@ html, body {
     }
 }
 
-@media (max-width: 700px) {
-    .section-product-hero {
-        margin-top: 18px;
+@media (max-width: 800px) {
+    .product-card {
+        grid-template-columns: 1fr;
     }
 
-        .section-product-hero .section-header {
-            align-items: flex-start;
-            flex-direction: column;
-        }
+    .product-media {
+        min-height: 240px;
+    }
 }
 
+/* Mejora para botones en página de detalle */
+.product-content .product-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+.product-content .product-actions form,
+.product-content .product-actions a {
+    flex: 1;
+    min-width: 120px;
+}
+
+.product-content .product-actions button {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    white-space: normal;
+    line-height: 1.3;
+    height: auto;
+    min-height: 44px;
+}
+
+@media (max-width: 700px) {
+    .product-content .product-actions {
+        flex-direction: column;
+    }
+
+    .product-content .product-actions form,
+    .product-content .product-actions a {
+        flex: 1 1 100%;
+    }
+}
 
 
 
@@ -1158,6 +1191,11 @@ html, body {
     gap: 10px;
     flex-wrap: wrap;
     margin-top: 20px;
+
+    /* Limit width and center the search area so it doesn't span full page */
+    max-width: 1510px; /* ajustado: intermedio entre antes (ancho completo) y 920px */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* El form en fila */
@@ -1169,32 +1207,32 @@ html, body {
     width: 100%;
 }
 
-    /* Tamaños “bonitos” */
-    .product-search-form .product-search-input {
-        min-width: 260px;
-        flex: 1;
+/* Tamaños “bonitos” */
+.product-search-form .product-search-input {
+    min-width: 260px;
+    flex: 1;
+}
+
+.product-search-form .product-search-select {
+    min-width: 220px;
+}
+
+/* Botón buscar un poco más compacto para que no ocupe tanto */
+.product-search-form .btn {
+    padding: 9px 18px;
+    font-size: 0.9rem;
+}
+
+/* Botón limpiar tipo ghost */
+.product-search-form .btn.search-clear {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+    .product-search-form .btn.search-clear:hover {
+        background-color: rgba(217, 137, 91, 0.08);
     }
-
-    .product-search-form .product-search-select {
-        min-width: 220px;
-    }
-
-    /* Botón buscar un poco más compacto para que no ocupe tanto */
-    .product-search-form .btn {
-        padding: 9px 18px;
-        font-size: 0.9rem;
-    }
-
-        /* Botón limpiar tipo ghost */
-        .product-search-form .btn.search-clear {
-            background: transparent;
-            color: var(--color-primary);
-            border: 1px solid var(--color-primary);
-        }
-
-            .product-search-form .btn.search-clear:hover {
-                background-color: rgba(217, 137, 91, 0.08);
-            }
 
 /* Chips para mostrar filtros activos (opcional) */
 .search-chips {
@@ -1665,6 +1703,41 @@ html, body {
     }
 }
 
+/* Mejora para botones en página de detalle */
+.product-content .product-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+.product-content .product-actions form,
+.product-content .product-actions a {
+    flex: 1;
+    min-width: 120px;
+}
+
+.product-content .product-actions button {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    white-space: normal;
+    line-height: 1.3;
+    height: auto;
+    min-height: 44px;
+}
+
+@media (max-width: 700px) {
+    .product-content .product-actions {
+        flex-direction: column;
+    }
+
+    .product-content .product-actions form,
+    .product-content .product-actions a {
+        flex: 1 1 100%;
+    }
+}
+
 
 
 /* ===== TIENDA (USUARIO) - PRODUCTOS ===== */
@@ -2035,6 +2108,160 @@ body {
 
     .home-perks {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ====== SECCIÓN RECOMENDACIÓN (HOME) ====== */
+
+.section-recommendation {
+    background: linear-gradient(135deg, rgba(245,212,192,.45) 0%, rgba(255,255,255,.0) 100%);
+    border: 1px solid rgba(217,137,91,.25);
+    border-radius: 22px;
+    padding: 26px 20px;
+}
+
+    .section-recommendation .section-header h2 {
+        color: var(--color-primary);
+        letter-spacing: 0.08em;
+    }
+
+/* La tarjeta destacada */
+.disc-card.featured {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.08);
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 0;
+}
+
+    .disc-card.featured img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 12px;
+        background: #faf7f4;
+        border-radius: 0;
+    }
+
+/* Info dentro de la tarjeta destacada */
+.disc-card.featured .card-info {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .disc-card.featured h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--color-text);
+    }
+
+    .disc-card.featured .artist {
+        margin: 0;
+        color: var(--color-muted);
+        font-size: 0.95rem;
+    }
+
+    .disc-card.featured .price {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: var(--color-primary);
+    }
+
+/* Botones dentro */
+.disc-card.featured .card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+    .disc-card.featured .card-actions .btn {
+        flex: 1;
+        min-width: 120px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+.secondary-btn {
+    background-color: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+    .secondary-btn:hover {
+        background-color: rgba(217, 137, 91, 0.08);
+    }
+
+/* Responsive */
+@media (max-width: 800px) {
+    .disc-card.featured {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .disc-card.featured img {
+        height: 200px;
+    }
+
+    .disc-card.featured .card-info {
+        padding: 14px 16px;
+    }
+
+    .disc-card.featured h3 {
+        font-size: 1.1rem;
+    }
+
+    .disc-card.featured .card-actions {
+        flex-direction: column;
+    }
+
+    .disc-card.featured .card-actions .btn {
+        min-width: unset;
+    }
+}
+
+@media (max-width: 600px) {
+    .section-recommendation {
+        padding: 18px 16px;
+        border-radius: 18px;
+    }
+
+    .disc-card.featured .price {
+        font-size: 1.2rem;
+    }
+}
+
+/* ====== GRID PARA MÚLTIPLES RECOMENDACIONES ====== */
+
+.cards-row-recommendations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 18px;
+}
+
+@media (max-width: 900px) {
+    .cards-row-recommendations {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .cards-row-recommendations {
+        grid-template-columns: 1fr;
+    }
+
+    .disc-card.featured {
+        grid-template-columns: 200px 1fr;
+    }
+
+    .disc-card.featured img {
+        height: 150px;
     }
 }
 

@@ -1,38 +1,86 @@
 ﻿@model IEnumerable<DSM.Models.PedidoViewModel>
 
-    @{
-    ViewData["Title"] = "Pedidos";
+@{
+    ViewData["Title"] = "Mis pedidos";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-
-    <h1>Pedidos</h1>
-
-    <p>
-        <a asp-action="Create">Crear nuevo</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Numero)</th>
-                <th>@Html.DisplayNameFor(model => model.Fecha)</th>
-                <th>@Html.DisplayNameFor(model => model.TotalPrecio)</th>
-                <th>@Html.DisplayNameFor(model => model.EstadoPedido)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model) {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Numero)</td>
-                <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
-                <td>@Html.DisplayFor(modelItem => item.TotalPrecio)</td>
-                <td>@Html.DisplayFor(modelItem => item.EstadoPedido)</td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Borrar", "Delete", new { id = item.Id })
-                </td>
-            </tr>
 }
-        </tbody>
-    </table>
+
+<section class="section">
+    <div class="section-inner">
+        <header class="section-header section-header-row">
+            <div>
+                <span class="section-kicker">Compras</span>
+                <h2>Mis Pedidos</h2>
+            </div>
+        </header>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div style="background: var(--color-card); padding: 30px; border-radius: 16px; text-align: center;">
+                <p style="color: var(--color-muted); margin: 0 0 16px 0;">
+                    Aún no tienes pedidos.
+                </p>
+                <a asp-controller="Tienda" asp-action="Catalogo" class="btn primary-btn">
+                    Ir al catálogo
+                </a>
+            </div>
+        }
+        else
+        {
+            <div style="display: grid; gap: 16px;">
+                @foreach (var item in Model)
+                {
+                    <article style="background: var(--color-card); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-soft); display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;">
+                        
+                        <div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                <div>
+                                    <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-muted);">Número de Pedido</label>
+                                    <div style="font-weight: 700; font-size: 1rem;">@item.Numero</div>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-muted);">Fecha</label>
+                                    <div style="font-weight: 700; font-size: 1rem;">@item.Fecha.ToString("dd/MM/yyyy")</div>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div>
+                                    <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-muted);">Total</label>
+                                    <div style="font-weight: 700; font-size: 1.1rem; color: var(--color-primary);">@String.Format("{0:0.00} €", item.TotalPrecio)</div>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-muted);">Estado</label>
+                                    <div style="font-weight: 600;">
+                                        @{
+                                            var estadoClass = item.EstadoPedido?.ToString() switch
+                                            {
+                                                "Pendiente" or "Confirmado" or "enProceso" => "background: rgba(255, 193, 7, 0.1); color: #f57f17;",
+                                                "Enviado" or "enviado" => "background: rgba(33, 150, 243, 0.1); color: #1976d2;",
+                                                "Entregado" or "entregado" => "background: rgba(76, 175, 80, 0.1); color: #388e3c;",
+                                                "Cancelado" or "cancelado" => "background: rgba(244, 67, 54, 0.1); color: #d32f2f;",
+                                                _ => "background: rgba(158, 158, 158, 0.1); color: #616161;"
+                                            };
+                                        }
+                                        <span style="display: inline-block; padding: 4px 10px; border-radius: 999px; @estadoClass font-size: 0.75rem; letter-spacing: 0.05em;">
+                                            @item.EstadoPedido
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn ghost-btn btn-sm" style="white-space: nowrap;">
+                                Ver detalles
+                            </a>
+                            <a asp-action="Factura" asp-route-id="@item.Id" class="btn primary-btn btn-sm" style="white-space: nowrap;">
+                                Ver factura
+                            </a>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

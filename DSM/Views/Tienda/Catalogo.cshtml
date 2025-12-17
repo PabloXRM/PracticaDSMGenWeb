@@ -19,15 +19,55 @@
             <article class="shop-card">
                 <a class="shop-card-link" asp-controller="Tienda" asp-action="Producto" asp-route-id="@p.Id">
                     <div class="shop-img">
-
                         @{
-                            var foto = string.IsNullOrWhiteSpace(p.Fotos)
-                            ? Url.Content("~/img/cd1.png")
-                            : Url.Content("~/" + p.Fotos.TrimStart('/'));
+                            // Fallback SIEMPRE válido
+                            var fallback = Url.Content("~/img/cd1.png");
+                            var foto = fallback;
+
+                            var raw = p?.Fotos?.Trim();
+
+                            if (!string.IsNullOrWhiteSpace(raw))
+                            {
+                                // Si viene una lista tipo "a.png;b.png" o "a.png,b.png", coger la primera
+                                raw = raw.Split(';', ',')[0].Trim();
+
+                                // Quitar comillas si viniera "\"cd1.png\""
+                                raw = raw.Trim('\"', '\'');
+
+                                // 1) URL absoluta
+                                if (raw.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                                raw.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    foto = raw;
+                                }
+                                // 2) Rutas web absolutas o con ~
+                                else if (raw.StartsWith("~/", StringComparison.Ordinal) || raw.StartsWith("/", StringComparison.Ordinal))
+                                {
+                                    // "/img/a.png" -> "~" + "/img/a.png" => "~/img/a.png"
+                                    foto = Url.Content(raw.StartsWith("~/", StringComparison.Ordinal) ? raw : ("~" + raw));
+                                }
+                                // 3) Rutas con carpeta relativa tipo "img/a.png" o "Images/a.png"
+                                else if (raw.StartsWith("img/", StringComparison.OrdinalIgnoreCase) ||
+                                raw.StartsWith("images/", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    foto = Url.Content("~/" + raw.TrimStart('/'));
+                                }
+                                // 4) Rutas Windows o inválidas para web -> fallback
+                                else if (raw.Contains(@"\") || raw.Contains(":"))
+                                {
+                                    foto = fallback;
+                                }
+                                // 5) Solo nombre de fichero -> asumir wwwroot/img/
+                                else
+                                {
+                                    foto = Url.Content("~/img/" + raw.TrimStart('/'));
+                                }
+                            }
                         }
 
-                        <img src="@foto" alt="@p.Descripcion" />
-
+                        <img src="@foto"
+                             alt="@(p?.Descripcion ?? "Producto")"
+                             onerror="this.onerror=null;this.src='@Url.Content("~/img/cd1.png")';" />
                     </div>
 
                     <div class="shop-info">

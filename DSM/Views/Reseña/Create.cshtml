@@ -1,54 +1,48 @@
 ﻿@model DSM.Models.ReseñaViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Escribir Reseña";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Crear</h1>
+<section class="section form-page">
+    <div class="form-card">
+        <div class="form-header">
+            <span class="section-kicker">Opiniones</span>
+            <h2>Escribir Reseña</h2>
+            <p>Comparte tu opinión sobre este producto.</p>
+        </div>
 
-<h4>Reseña</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" method="post" class="form-layout">
+            <div asp-validation-summary="ModelOnly" class="form-validation-summary"></div>
 
-            <!-- SELECT de Producto -->
-            <div class="form-group">
-                <label asp-for="IdProducto" class="control-label"></label>
-                <select asp-for="IdProducto" asp-items="ViewBag.Productos" class="form-control"></select>
-                <span asp-validation-for="IdProducto" class="text-danger"></span>
+            <div class="form-field">
+                <label asp-for="IdProducto" class="control-label">Producto</label>
+                <select asp-for="IdProducto" asp-items="ViewBag.Productos" class="form-select" required>
+                    <option value="">-- Selecciona un producto --</option>
+                </select>
+                <span asp-validation-for="IdProducto" class="form-error"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            <div class="form-field">
+                <label asp-for="Descripcion" class="control-label">Tu Opinión</label>
+                <textarea asp-for="Descripcion" class="form-textarea" placeholder="Cuéntanos qué te pareció del producto..." required></textarea>
+                <span asp-validation-for="Descripcion" class="form-error"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Nota" class="control-label"></label>
-                <input asp-for="Nota" class="form-control" />
-                <span asp-validation-for="Nota" class="text-danger"></span>
+            <div class="form-field">
+                <label asp-for="Nota" class="control-label">Calificación (0-10)</label>
+                <input asp-for="Nota" type="number" min="0" max="10" class="form-input" required />
+                <span asp-validation-for="Nota" class="form-error"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">Publicar Reseña</button>
+                <a asp-controller="Tienda" asp-action="Catalogo" class="btn ghost-btn">Cancelar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</section>
 
 @section Scripts {
     @{

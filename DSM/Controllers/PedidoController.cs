@@ -10,6 +10,8 @@ using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
+using DSM.Filters;
 
 namespace DSM.Controllers
 {
@@ -88,6 +90,79 @@ namespace DSM.Controllers
             return View("Ver", pedidoView);
         }
 
+        // GET: PedidoController/Factura/5
+        public ActionResult Factura(int id)
+        {
+            var u = HttpContext.Session.Get<UsuarioViewModel>("usuario");
+            if (u == null) return RedirectToAction("Login", "Usuario");
+
+            bool isAdmin = HttpContext.Session.GetString("IsAdmin") == "true";
+
+            SessionInitialize();
+
+            // Obtener pedido
+            var pedidoRepository = new PedidoRepository(session);
+            var pedidoCEN = new PedidoCEN(pedidoRepository);
+            var pedidoEN = pedidoCEN.ReadOID(id);
+
+            if (pedidoEN == null)
+            {
+                SessionClose();
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Si NO es admin, solo puede ver factura de pedidos suyos
+            if (!isAdmin && (pedidoEN.Usuario == null || pedidoEN.Usuario.Email != u.email))
+            {
+                SessionClose();
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Obtener líneas de pedido
+            var lineaPedidoRepository = new LineaPedidoRepository(session);
+            var lineaPedidoCEN = new LineaPedidoCEN(lineaPedidoRepository);
+            var lineasEN = lineaPedidoCEN.ReadAll(0, -1)
+                .Where(l => l.Pedido != null && l.Pedido.Id == id)
+                .ToList();
+
+            // Obtener factura si existe
+            var facturaRepository = new FacturaRepository(session);
+            var facturaCEN = new FacturaCEN(facturaRepository);
+            var facturaEN = facturaCEN.ReadAll(0, -1)
+                .FirstOrDefault(f => f.Pedido != null && f.Pedido.Id == id);
+
+            // Asegurar que la colección lazy de líneas está inicializada antes de cerrar la sesión
+            try
+            {
+                if (pedidoEN?.LineaPedido != null)
+                {
+                    NHibernateUtil.Initialize(pedidoEN.LineaPedido);
+                    foreach (var lp in pedidoEN.LineaPedido)
+                    {
+                        if (lp?.Producto != null)
+                            NHibernateUtil.Initialize(lp.Producto);
+                    }
+                }
+            }
+            catch
+            {
+                // Si no es posible inicializar via NHibernate, seguimos porque ya tenemos lineasEN
+            }
+
+            // MAPEAR ANTES de cerrar la sesión para evitar LazyInitializationException
+            var pedidoView = new PedidoAssembler().ConvertENToModelUI(pedidoEN);
+            var lineasView = new LineaPedidoAssembler().ConvertListENToViewModel(lineasEN).ToList();
+
+            SessionClose();
+
+            ViewBag.Pedido = pedidoView;
+            ViewBag.Lineas = lineasView;
+            ViewBag.Factura = facturaEN;
+            ViewBag.Usuario = u;
+
+            return View(pedidoView);
+        }
+
         // GET: PedidoController/Create
         public ActionResult Create()
         {
@@ -144,6 +219,7 @@ namespace DSM.Controllers
         }
 
         // GET: PedidoController/Edit/5
+        [AdminOnly]
         public ActionResult Edit(int id)
         {
             SessionInitialize();
@@ -161,6 +237,7 @@ namespace DSM.Controllers
         // POST: PedidoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AdminOnly]
         public ActionResult Edit(PedidoViewModel pedido)
         {
             if (!ModelState.IsValid)

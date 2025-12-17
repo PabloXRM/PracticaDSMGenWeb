@@ -10,5 +10,9 @@ namespace DSM.Models
         public FormatoEnum? Formato { get; set; }
 
         public IList<ProductoViewModel> Productos { get; set; } = new List<ProductoViewModel>();
+
+        public ProductoViewModel? ProductoRecomendado { get; set; }
+
+        public List<ProductoViewModel> ProductosRecomendados { get; set; } = new List<ProductoViewModel>();
     }
 }

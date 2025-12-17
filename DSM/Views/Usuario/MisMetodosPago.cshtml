@@ -1,0 +1,77 @@
+@model IEnumerable<DSM.Models.MetodoPagoViewModel>
+@using PracticaDSMGen.ApplicationCore.Enumerated.PracticaDSM
+
+@{
+    ViewData["Title"] = "Mis métodos de pago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section section-pay-hero">
+    <div class="section-inner">
+        <header class="section-header section-header-row">
+            <div>
+                <span class="section-kicker">Configuración</span>
+                <h2>Métodos de Pago</h2>
+            </div>
+        </header>
+
+        <p class="section-subtitle">
+            Selecciona un método de pago para realizar compras. Si necesitas agregar un nuevo método, contacta con soporte.
+        </p>
+    </div>
+</section>
+
+<section class="section section-pay-list">
+    <div class="section-inner">
+        @if (Model == null || !Model.Any())
+        {
+            <div style="background: var(--color-card); padding: 30px; border-radius: 16px; text-align: center;">
+                <p style="color: var(--color-muted); margin: 0 0 16px 0;">
+                    No hay métodos de pago disponibles en este momento.
+                </p>
+                <p style="color: var(--color-muted); font-size: 0.9rem; margin: 0;">
+                    Contacta con nuestro equipo de soporte para ayuda.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="pay-grid">
+                @foreach (var item in Model)
+                {
+                    <article class="pay-card">
+
+                        <header class="pay-card-header">
+                            <h3 class="pay-title">@item.TipoPago</h3>
+
+                            <span class="pay-valid @(item.Valido ? "pay-valid--on" : "pay-valid--off")">
+                                @(item.Valido ? "Disponible" : "No disponible")
+                            </span>
+                        </header>
+
+                        @if (item.Valido)
+                        {
+                            <div style="padding: 12px 0; text-align: center;">
+                                <p style="color: var(--color-muted); font-size: 0.9rem; margin: 0;">
+                                    Puedes usar este método para realizar compras en el carrito.
+                                </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="padding: 12px 0; text-align: center;">
+                                <p style="color: var(--color-muted); font-size: 0.9rem; margin: 0;">
+                                    Este método no está disponible actualmente.
+                                </p>
+                            </div>
+                        }
+                    </article>
+                }
+            </div>
+        }
+
+        <div style="margin-top: 20px;">
+            <a asp-controller="Usuario" asp-action="Perfil" class="btn ghost-btn">Volver a mi perfil</a>
+        </div>
+    </div>
+</section>
